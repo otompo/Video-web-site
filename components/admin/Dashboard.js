@@ -1,6 +1,7 @@
 import { CaretUpOutlined, TeamOutlined, BookOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { Context } from '../../context';
 import Card from './Card';
 
 const Dashboard = ({ children }) => {
@@ -8,6 +9,10 @@ const Dashboard = ({ children }) => {
   const [ourWorks, setOurWorks] = useState([]);
   const [usersTotal, setUsersTotal] = useState([]);
   const [category, setCategory] = useState([]);
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   useEffect(() => {
     getTotalUsers();
@@ -18,7 +23,9 @@ const Dashboard = ({ children }) => {
   const showourWorks = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/ourworks`);
+      const { data } = await axios.get(`/api/admin/ourworks`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setOurWorks(data);
       setLoading(false);
     } catch (err) {
@@ -31,7 +38,9 @@ const Dashboard = ({ children }) => {
   const showCategory = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/category`);
+      const { data } = await axios.get(`/api/admin/category`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       //console.log(data);
       setCategory(data.total);
       setLoading(false);
@@ -44,7 +53,9 @@ const Dashboard = ({ children }) => {
   const getTotalUsers = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/users`);
+      const { data } = await axios.get(`/api/admin/users`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       // console.log(data);
       setUsersTotal(data);
       setLoading(false);
@@ -53,6 +64,7 @@ const Dashboard = ({ children }) => {
       setLoading(false);
     }
   };
+
   return (
     <div className="container-fluid" id="admin">
       <div className="row mt-5">

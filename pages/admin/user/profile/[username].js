@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import AdminRoute from '../../../../components/routes/AdminRoutes';
 import Layout from '../../../../components/layout/Layout';
 import { useRouter } from 'next/router';
@@ -6,12 +6,17 @@ import { toast } from 'react-toastify';
 import { Avatar } from 'antd';
 import moment from 'moment';
 import axios from 'axios';
+import { Context } from '../../../../context';
 
 const UserProfilePage = () => {
   const router = useRouter();
   const { username } = router.query;
   const [loading, setLoading] = useState('');
-  const [user, setUser] = useState({});
+  const [userInfor, setUserInfor] = useState({});
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   useEffect(() => {
     loadUser();
@@ -20,9 +25,11 @@ const UserProfilePage = () => {
   const loadUser = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/profile/${username}`);
+      const { data } = await axios.get(`/api/profile/${username}`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       // console.log(data);
-      setUser(data);
+      setUserInfor(data);
       setLoading(false);
     } catch (err) {
       console.log(err.response.data.message);
@@ -51,12 +58,12 @@ const UserProfilePage = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{user && user.name}</td>
-                      <td>{user && user.email}</td>
-                      <td>{user && user.role}</td>
-                      <td>{user && user.generatedPasword}</td>
-                      <td>{moment(user.createdAt).fromNow()}</td>
-                      <td>{moment(user.last_login_date).fromNow()}</td>
+                      <td>{userInfor && userInfor.name}</td>
+                      <td>{userInfor && userInfor.email}</td>
+                      <td>{userInfor && userInfor.role}</td>
+                      <td>{userInfor && userInfor.generatedPasword}</td>
+                      <td>{moment(userInfor.createdAt).fromNow()}</td>
+                      <td>{moment(userInfor.last_login_date).fromNow()}</td>
                     </tr>
                   </tbody>
                 </table>

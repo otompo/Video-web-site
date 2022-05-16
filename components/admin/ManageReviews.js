@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
 import { Spin, Modal, Progress, Image } from 'antd';
 import {
@@ -14,6 +14,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Resizer from 'react-image-file-resizer';
 import Loader from '../layout/Loader';
+import { Context } from '../../context';
 
 const { confirm } = Modal;
 
@@ -31,6 +32,10 @@ const ManageReviews = () => {
   const [progress, setProgress] = useState(0);
   const [video, setVideo] = useState({});
   // const [imagePreview, setImagePreview] = useState('');
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -56,7 +61,9 @@ const ManageReviews = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/reviews`);
+      const { data } = await axios.get(`/api/admin/reviews`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setReviews(data);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -73,11 +80,14 @@ const ManageReviews = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(`/api/admin/reviews`, {
-        ...values,
-        video,
-      });
-
+      const { data } = await axios.post(
+        `/api/admin/reviews`,
+        {
+          ...values,
+          video,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       toast.success('Success');
       setValues({ ...values, name: '', loading: false });
       setImagePreview('');
@@ -159,7 +169,10 @@ const ManageReviews = () => {
           const removed = allReview.splice(index, 1);
           setReviews(allReview);
           // send request to server
-          const { data } = axios.delete(`/api/admin/reviews/${removed[0]._id}`);
+          const { data } = axios.delete(
+            `/api/admin/reviews/${removed[0]._id}`,
+            { headers: { authorization: `Bearer ${user.token}` } },
+          );
           toast.success('Reviews Deleted Successfully');
           setValues({ ...values, loading: false });
         },

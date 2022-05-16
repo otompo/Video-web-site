@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Progress, Spin } from 'antd';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Loader from '../layout/Loader';
 import { useRouter } from 'next/router';
+import { Context } from '../../context';
 
 const EditAbout = () => {
   const router = useRouter();
@@ -21,6 +22,10 @@ const EditAbout = () => {
   const [video, setVideo] = useState({});
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   // console.log('previewVideo', video);
 
@@ -35,7 +40,9 @@ const EditAbout = () => {
   const loadSingleAbout = async () => {
     try {
       //   setOk(true);
-      const { data } = await axios.get(`/api/admin/about/${slug}`);
+      const { data } = await axios.get(`/api/admin/about/${slug}`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setValues(data);
       //   setOk(false);
     } catch (err) {
@@ -48,9 +55,13 @@ const EditAbout = () => {
     e.preventDefault();
     try {
       setOk(true);
-      const { data } = await axios.put(`/api/admin/about/${slug}`, {
-        video,
-      });
+      const { data } = await axios.put(
+        `/api/admin/about/${slug}`,
+        {
+          video,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       setOk(false);
       setProgress(0);
       setVideo({});
@@ -67,9 +78,13 @@ const EditAbout = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.patch(`/api/admin/about/${slug}`, {
-        ...values,
-      });
+      const { data } = await axios.patch(
+        `/api/admin/about/${slug}`,
+        {
+          ...values,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       toast.success('Success');
       setValues({ ...values, description: '', loading: false });
       setSuccess(false);

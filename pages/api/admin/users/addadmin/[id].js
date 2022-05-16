@@ -8,6 +8,6 @@ const handler = nc({ onError });
 
 dbConnect();
 
-handler.use(isAuth, isAdmin).put(makeUserAdmin);
+handler.put(makeUserAdmin);
 
 export default handler;

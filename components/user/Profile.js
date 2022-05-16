@@ -9,6 +9,7 @@ import Resizer from 'react-image-file-resizer';
 import Layout from '../layout/Layout';
 import Loader from '../layout/Loader';
 import { Context } from '../../context';
+import Cookies from 'js-cookie';
 
 const UserProfilePage = () => {
   const router = useRouter();
@@ -62,23 +63,29 @@ const UserProfilePage = () => {
     e.preventDefault();
     try {
       setValues({ ...values, loading: true });
-      const { data } = await axios.put(`/api/user/update`, {
-        ...values,
-      });
+      const { data } = await axios.put(
+        `/api/user/update`,
+        {
+          ...values,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
 
-      const as = JSON.parse(await window.localStorage.getItem('user'));
+      const as = JSON.parse(await window.localStorage.getItem('userInfor'));
       as.user = data;
-      // console.log(as.user);
+      // const ascos = Cookies.get('user');
+      // console.log(ascos);
       dispatch({
-        type: 'UPDATE_SUCCESS',
+        type: 'UPDATE',
         payload: as.user,
       });
-
+      Cookies.set('user', as.user);
       toast.success('Success');
       setValues({ ...values, loading: false });
       //   updateUser(data);
     } catch (err) {
-      toast.error(err.response.data.message);
+      console.log(err.response);
+      // toast.error(err.response.data.message);
       setValues({ ...values, loading: false });
     }
   };
@@ -93,9 +100,13 @@ const UserProfilePage = () => {
     // resize image and send image to backend
     Resizer.imageFileResizer(file, 720, 500, 'JPEG', 100, 0, async (uri) => {
       try {
-        let { data } = await axios.post(`/api/user/profileimage`, {
-          profileImage: uri,
-        });
+        let { data } = await axios.post(
+          `/api/user/profileimage`,
+          {
+            profileImage: uri,
+          },
+          { headers: { authorization: `Bearer ${user.token}` } },
+        );
         // set image in the state
         setProfileImage(data);
         setProgress(false);
@@ -111,20 +122,24 @@ const UserProfilePage = () => {
     e.preventDefault();
     try {
       setSaving(true);
-      const { data } = await axios.put(`/api/user/profileimage/updateimage`, {
-        profileImage,
-      });
-      const as = JSON.parse(await window.localStorage.getItem('user'));
+      const { data } = await axios.put(
+        `/api/user/profileimage/updateimage`,
+        {
+          profileImage,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
+      const as = JSON.parse(await window.localStorage.getItem('userInfor'));
       as.user = data;
-      // console.log(as.user);
       dispatch({
-        type: 'UPDATE_SUCCESS',
+        type: 'UPDATE',
         payload: as.user,
       });
+      Cookies.set('user', as.user);
       setSaving(false);
       toast.success('Image Saved');
     } catch (err) {
-      console.log(err.response.data.message);
+      console.log(err.response);
       setSaving(false);
     }
   };
@@ -133,10 +148,14 @@ const UserProfilePage = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axios.patch(`/api/user/updatepassword`, {
-        passwordCurrent,
-        password,
-      });
+      const { data } = await axios.patch(
+        `/api/user/updatepassword`,
+        {
+          passwordCurrent,
+          password,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       setPassword('');
       setPasswordCurrent('');
       toast.success('Password pdated successfully');

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
 import { Tooltip, Modal, Avatar, Image } from 'antd';
 import {
@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import Loader from '../layout/Loader';
 import Link from 'next/link';
+import { Context } from '../../context';
 
 const ManageUsers = () => {
   const { confirm } = Modal;
@@ -25,10 +26,13 @@ const ManageUsers = () => {
     loading: false,
   });
   const [users, setUsers] = useState([]);
-  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   useEffect(() => {
     loadUsers();
@@ -52,7 +56,9 @@ const ManageUsers = () => {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/users`);
+      const { data } = await axios.get(`/api/admin/users`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setUsers(data);
       setLoading(false);
     } catch (err) {
@@ -79,6 +85,7 @@ const ManageUsers = () => {
           // send request to server
           const { data } = await axios.delete(
             `/api/admin/users/${removed[0]._id}`,
+            { headers: { authorization: `Bearer ${user.token}` } },
           );
           toast.success('User Deleted Successfully');
           setSuccess(false);
@@ -109,6 +116,7 @@ const ManageUsers = () => {
           // setSuccess(true);
           const { data } = await axios.put(
             `/api/admin/users/removeadmin/${removed[0]._id}`,
+            { headers: { authorization: `Bearer ${user.token}` } },
           );
           // setUsers(allusers);
           toast.success('Removed Successfully');
@@ -128,11 +136,13 @@ const ManageUsers = () => {
   const makeUserAnAdmin = async (e, id) => {
     try {
       setSuccess(true);
-      const { data } = await axios.put(`/api/admin/users/addadmin/${id}`);
+      const { data } = await axios.put(`/api/admin/users/addadmin/${id}`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setSuccess(false);
       toast.success('Great! User is now an admin');
     } catch (err) {
-      console.log(err.response.data.messag);
+      console.log(err.response.data.message);
       // toast.error(err.response.data.message);
       setSuccess(false);
     }
@@ -147,9 +157,13 @@ const ManageUsers = () => {
     try {
       setValues({ ...values, name: '', email: '', loading: true });
       setSuccess(true);
-      const { data } = await axios.post(`/api/admin/addstaff`, {
-        ...values,
-      });
+      const { data } = await axios.post(
+        `/api/admin/addstaff`,
+        {
+          ...values,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       toast.success('Success');
       setValues({ ...values, name: '', email: '', loading: false });
       setSuccess(false);
@@ -160,6 +174,7 @@ const ManageUsers = () => {
       setSuccess(false);
     }
   };
+
   const setData = () => {
     const data = {
       columns: [
@@ -178,11 +193,11 @@ const ManageUsers = () => {
           field: 'join',
           sort: 'asc',
         },
-        {
-          label: 'Role',
-          field: 'role',
-          sort: 'asc',
-        },
+        // {
+        //   label: 'Role',
+        //   field: 'role',
+        //   sort: 'asc',
+        // },
         {
           label: 'Email',
           field: 'email',
@@ -217,7 +232,7 @@ const ManageUsers = () => {
           ),
           name: `${user.name}`,
           join: `${moment(user.createdAt).fromNow()}`,
-          role: `${user.role}`,
+          // role: `${user.role}`,
           email: `${user.email}`,
           action: (
             <>
@@ -233,7 +248,7 @@ const ManageUsers = () => {
                   </Link>
                 </div>
                 <div className="col-md-3">
-                  {user && user.role.includes('Admin') ? (
+                  {user && user.isAdmin ? (
                     <Tooltip title="Remove User as Admin">
                       <span
                         onClick={() => removeUserAsAdmin(index)}

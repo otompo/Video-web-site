@@ -133,7 +133,7 @@ const Navbar = () => {
               <a>Contact</a>
             </Link>
           </li>
-          {/* {currentUser && (
+          {currentUser && (
             <li
               className={
                 router.pathname == '/user' ? 'active-nav' : 'nav-item '
@@ -143,7 +143,7 @@ const Navbar = () => {
                 <a>Dashboard</a>
               </Link>
             </li>
-          )} */}
+          )}
         </ul>
       </nav>
     </div>

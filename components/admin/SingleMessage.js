@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { SyncOutlined } from '@ant-design/icons';
@@ -13,6 +13,7 @@ import { Button, Tooltip, Modal } from 'antd';
 import moment from 'moment';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
+import { Context } from '../../context';
 
 const SingleMessage = () => {
   const router = useRouter();
@@ -21,6 +22,10 @@ const SingleMessage = () => {
   const [message, setMessage] = useState({});
   const [success, setSuccess] = useState(false);
   const [replyedMessage, setReplyedMessage] = useState({});
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   const [values, setValues] = useState({
     email: '',
@@ -41,10 +46,14 @@ const SingleMessage = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(`/api/admin/messages/${id}`, {
-        ...values,
-        replyedMessage,
-      });
+      const { data } = await axios.post(
+        `/api/admin/messages/${id}`,
+        {
+          ...values,
+          replyedMessage,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       // console.log(data);
       setValues({ ...values, email: '', loading: false });
       setReplyedMessage({});
@@ -60,7 +69,9 @@ const SingleMessage = () => {
 
   const loadMessage = async () => {
     try {
-      const { data } = await axios.get(`/api/admin/messages/${id}`);
+      const { data } = await axios.get(`/api/admin/messages/${id}`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setMessage(data);
     } catch (err) {
       console.log(err);

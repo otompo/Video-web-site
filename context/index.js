@@ -30,13 +30,17 @@ const rootReducer = (state, action) => {
 // context provider
 const Provider = ({ children }) => {
   const [state, dispatch] = useReducer(rootReducer, initialState);
+
   useEffect(() => {
     dispatch({
       type: 'LOGIN',
       payload: JSON.parse(window.localStorage.getItem('userInfor')),
     });
+  }, []);
+
+  useEffect(() => {
     dispatch({
-      type: 'UPDATE_SUCCESS',
+      type: 'UPDATE',
       payload: JSON.parse(window.localStorage.getItem('userInfor')),
     });
   }, []);

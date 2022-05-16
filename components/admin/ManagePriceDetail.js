@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
 import { Modal, Progress } from 'antd';
 import Link from 'next/link';
@@ -13,6 +13,7 @@ import moment from 'moment';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
 import { toast } from 'react-toastify';
+import { Context } from '../../context';
 const { confirm } = Modal;
 
 const ManagePriceDetail = () => {
@@ -33,7 +34,10 @@ const ManagePriceDetail = () => {
   const [prices, setPrices] = useState([]);
   const [checked, setChecked] = useState([]); // categories
   const [inputList, setInputList] = useState([{ name: '' }]);
-  console.log(values.title, values.price);
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -74,7 +78,9 @@ const ManagePriceDetail = () => {
   const showPrices = async () => {
     try {
       setOk(true);
-      const { data } = await axios.get(`/api/admin/prices`);
+      const { data } = await axios.get(`/api/admin/prices`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setPrices(data);
       setOk(false);
     } catch (err) {
@@ -88,12 +94,16 @@ const ManagePriceDetail = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(`/api/admin/featureprice`, {
-        ...values,
-        selectedCategory,
-        inputList,
-        // video,
-      });
+      const { data } = await axios.post(
+        `/api/admin/featureprice`,
+        {
+          ...values,
+          selectedCategory,
+          inputList,
+          // video,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       toast.success('Success');
       setValues({ ...values, title: '', price: '', loading: false });
       setSelectedCategory('');
@@ -115,11 +125,16 @@ const ManagePriceDetail = () => {
       videoData.append('video', file);
       //   console.log(file);
       // save progress bar and send video as form data to backend
-      const { data } = await axios.post(`/api/upload/video`, videoData, {
-        onUploadProgress: (e) => {
-          setProgress(Math.round((100 * e.loaded) / e.total));
+      const { data } = await axios.post(
+        `/api/upload/video`,
+        { headers: { authorization: `Bearer ${user.token}` } },
+        videoData,
+        {
+          onUploadProgress: (e) => {
+            setProgress(Math.round((100 * e.loaded) / e.total));
+          },
         },
-      });
+      );
       // once response is received
       //   console.log(data);
       setVideo(data);
@@ -138,7 +153,9 @@ const ManagePriceDetail = () => {
   const showFeaturePrices = async () => {
     try {
       setValues({ ...values, loading: true });
-      const { data } = await axios.get(`/api/admin/featureprice`);
+      const { data } = await axios.get(`/api/admin/featureprice`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setFeaturprices(data);
       setValues({ ...values, loading: false });
     } catch (err) {

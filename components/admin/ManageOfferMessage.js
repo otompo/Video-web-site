@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
 import { Tooltip, Modal } from 'antd';
-import {
-  EyeOutlined,
-  DeleteOutlined,
-  ExclamationCircleOutlined,
-} from '@ant-design/icons';
+import { EyeOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
 import Loader from '../layout/Loader';
@@ -14,24 +10,31 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
+import { Context } from '../../context';
 
 const ManageOfferMessages = () => {
   const { confirm } = Modal;
 
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { id } = router.query;
+
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   useEffect(() => {
     loadMessages();
   }, []);
 
-  const router = useRouter();
-  const { id } = router.query;
-
   const loadMessages = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/offermessages`);
+      const { data } = await axios.get(`/api/admin/offermessages`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setMessages(data);
       setLoading(false);
     } catch (err) {

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
-import { Avatar, Tooltip, Spin, Modal, Progress } from 'antd';
-import Link from 'next/link';
+import { Spin, Modal, Progress } from 'antd';
 import {
   DeleteOutlined,
-  EyeOutlined,
   SyncOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
@@ -13,6 +11,7 @@ import moment from 'moment';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
 import { toast } from 'react-toastify';
+import { Context } from '../../context';
 const { confirm } = Modal;
 
 const ManageWorks = () => {
@@ -31,6 +30,11 @@ const ManageWorks = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]); // categories
+
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -55,7 +59,9 @@ const ManageWorks = () => {
 
   const loadCategories = async () => {
     try {
-      const { data } = await axios.get(`/api/admin/category`);
+      const { data } = await axios.get(`/api/admin/category`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setCategories(data.category);
     } catch (err) {
       console.log(err);
@@ -67,11 +73,15 @@ const ManageWorks = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(`/api/admin/ourworks`, {
-        ...values,
-        video,
-        selectedCategory,
-      });
+      const { data } = await axios.post(
+        `/api/admin/ourworks`,
+        {
+          ...values,
+          video,
+          selectedCategory,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       toast.success('Success');
       setValues({ ...values, name: '', description: '', loading: false });
       setSuccess(false);
@@ -114,7 +124,9 @@ const ManageWorks = () => {
   const showourWorks = async () => {
     try {
       setValues({ ...values, loading: true });
-      const { data } = await axios.get(`/api/admin/ourworks`);
+      const { data } = await axios.get(`/api/admin/ourworks`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setOurWorks(data);
       setValues({ ...values, loading: false });
     } catch (err) {
@@ -145,6 +157,7 @@ const ManageWorks = () => {
           // send request to server
           const { data } = await axios.delete(
             `/api/admin/ourworks/${removed[0]._id}`,
+            { headers: { authorization: `Bearer ${user.token}` } },
           );
           // console.log('LESSON DELETED =>', data);
           toast.success('Work Deleted Successfully');

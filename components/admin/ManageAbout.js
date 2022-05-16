@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
 import { Progress, Spin, Modal, Upload } from 'antd';
 import {
   ExclamationCircleOutlined,
   SyncOutlined,
-  EyeOutlined,
   EditOutlined,
 } from '@ant-design/icons';
 import AdminRoute from '../routes/AdminRoutes';
@@ -14,6 +13,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Loader from '../layout/Loader';
 import Link from 'next/link';
+import { Context } from '../../context';
 
 const { confirm } = Modal;
 
@@ -30,6 +30,10 @@ const ManageAbout = () => {
   const [video, setVideo] = useState({});
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   // console.log('previewVideo', video);
 
@@ -57,7 +61,9 @@ const ManageAbout = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/about`);
+      const { data } = await axios.get(`/api/admin/about`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setAbouts(data);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -73,10 +79,14 @@ const ManageAbout = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(`/api/admin/about`, {
-        ...values,
-        video,
-      });
+      const { data } = await axios.post(
+        `/api/admin/about`,
+        {
+          ...values,
+          video,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       toast.success('Success');
       setValues({ ...values, description: '', loading: false });
       setSuccess(false);

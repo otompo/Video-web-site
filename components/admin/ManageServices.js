@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
 // import '@fortawesome/fontawesome-free/css/all.min.css';
 // import 'bootstrap-css-only/css/bootstrap.min.css';
@@ -16,6 +16,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Resizer from 'react-image-file-resizer';
 import Loader from '../layout/Loader';
+import { Context } from '../../context';
 
 const { confirm } = Modal;
 
@@ -33,6 +34,10 @@ const ManageServices = () => {
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
   const [profileImage, setProfileImage] = useState({});
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -58,7 +63,9 @@ const ManageServices = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/services`);
+      const { data } = await axios.get(`/api/admin/services`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setServices(data.services);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -74,10 +81,14 @@ const ManageServices = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(`/api/admin/services`, {
-        ...values,
-        profileImage,
-      });
+      const { data } = await axios.post(
+        `/api/admin/services`,
+        {
+          ...values,
+          profileImage,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       toast.success('Success');
       setValues({ ...values, title: '', description: '', loading: false });
       setImagePreview('');
@@ -98,9 +109,13 @@ const ManageServices = () => {
     // resize image and send image to backend
     Resizer.imageFileResizer(file, 720, 500, 'JPEG', 100, 0, async (uri) => {
       try {
-        let { data } = await axios.post(`/api/user/profileimage`, {
-          profileImage: uri,
-        });
+        let { data } = await axios.post(
+          `/api/user/profileimage`,
+          { headers: { authorization: `Bearer ${user.token}` } },
+          {
+            profileImage: uri,
+          },
+        );
         // set image in the state
         setProfileImage(data);
         setLoading(false);
@@ -132,6 +147,7 @@ const ManageServices = () => {
           // send request to server
           const { data } = axios.delete(
             `/api/admin/services/${removed[0]._id}`,
+            { headers: { authorization: `Bearer ${user.token}` } },
           );
           toast.success('Deleted Successfully');
           setValues({ ...values, loading: false });

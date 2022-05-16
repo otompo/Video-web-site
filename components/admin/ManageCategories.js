@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
 // import '@fortawesome/fontawesome-free/css/all.min.css';
 // import 'bootstrap-css-only/css/bootstrap.min.css';
@@ -10,12 +10,12 @@ import {
 } from '@ant-design/icons';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
-import moment from 'moment';
 import TextTruncate from 'react-text-truncate';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Resizer from 'react-image-file-resizer';
 import Loader from '../layout/Loader';
+import { Context } from '../../context';
 
 const { confirm } = Modal;
 
@@ -33,6 +33,10 @@ const ManageCategories = () => {
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
   const [profileImage, setProfileImage] = useState({});
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -58,7 +62,9 @@ const ManageCategories = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/category`);
+      const { data } = await axios.get(`/api/admin/category`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setCategories(data.category);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -74,10 +80,14 @@ const ManageCategories = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(`/api/admin/category`, {
-        ...values,
-        profileImage,
-      });
+      const { data } = await axios.post(
+        `/api/admin/category`,
+        {
+          ...values,
+          profileImage,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       toast.success('Success');
       setValues({ ...values, title: '', description: '', loading: false });
       setImagePreview('');
@@ -98,9 +108,13 @@ const ManageCategories = () => {
     // resize image and send image to backend
     Resizer.imageFileResizer(file, 720, 500, 'JPEG', 100, 0, async (uri) => {
       try {
-        let { data } = await axios.post(`/api/user/profileimage`, {
-          profileImage: uri,
-        });
+        let { data } = await axios.post(
+          `/api/user/profileimage`,
+          { headers: { authorization: `Bearer ${user.token}` } },
+          {
+            profileImage: uri,
+          },
+        );
         // set image in the state
         setProfileImage(data);
         setLoading(false);

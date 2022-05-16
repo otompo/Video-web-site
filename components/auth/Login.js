@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { SyncOutlined } from '@ant-design/icons';
 import { Context } from '../../context';
 import { useRouter } from 'next/router';
-import Loader from '../layout/Loader';
 import PageLoader from '../layout/PageLoader';
 import Cookies from 'js-cookie';
 import axios from 'axios';

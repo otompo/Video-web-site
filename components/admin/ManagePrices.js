@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
 import { Progress, Spin, Modal } from 'antd';
 import {
@@ -12,6 +12,7 @@ import TextTruncate from 'react-text-truncate';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Loader from '../layout/Loader';
+import { Context } from '../../context';
 
 const { confirm } = Modal;
 
@@ -30,6 +31,11 @@ const ManagePrices = () => {
   const [video, setVideo] = useState({});
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
   // console.log('previewVideo', video);
 
@@ -57,7 +63,9 @@ const ManagePrices = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/prices`);
+      const { data } = await axios.get(`/api/admin/prices`, {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
       setPrices(data);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -72,10 +80,14 @@ const ManagePrices = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(`/api/prices`, {
-        ...values,
-        video,
-      });
+      const { data } = await axios.post(
+        `/api/prices`,
+        {
+          ...values,
+          video,
+        },
+        { headers: { authorization: `Bearer ${user.token}` } },
+      );
       toast.success('Success');
       setValues({ ...values, name: '', description: '', loading: false });
       setSuccess(false);
@@ -131,7 +143,9 @@ const ManagePrices = () => {
           const removed = allPrices.splice(index, 1);
           setPrices(allPrices);
           // send request to server
-          const { data } = axios.delete(`/api/admin/prices/${removed[0]._id}`);
+          const { data } = axios.delete(`/api/admin/prices/${removed[0]._id}`, {
+            headers: { authorization: `Bearer ${user.token}` },
+          });
           toast.success('Price Deleted Successfully');
           setValues({ ...values, loading: false });
         },

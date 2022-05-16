@@ -8,6 +8,6 @@ const handler = nc({ onError });
 
 dbConnect();
 
-handler.use(isAuth, isAdmin).put(removeUserAsAdmin);
+handler.put(removeUserAsAdmin);
 
 export default handler;
