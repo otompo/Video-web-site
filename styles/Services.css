@@ -1,0 +1,29 @@
+/* service-area */
+
+.service-area {
+  background-color: #aabfd2;
+  padding: 20px;
+  position: relative;
+  /* background-color: rgba(119, 119, 119, 0.15); */
+}
+
+.service-area a {
+  color: #000000 !important;
+}
+
+.showprices a {
+  color: #000000 !important;
+}
+
+.service-area .anticon {
+  font-size: 80px !important;
+  padding-top: 15px !important;
+}
+
+.admin_card .anticon svg {
+  font-size: 28px;
+}
+
+.table .anticon svg {
+  font-size: 20px;
+}

@@ -1,0 +1,18 @@
+#accordion .accordion {
+  /* width: 70%; */
+  box-shadow: rgb(0 0 0 / 15%) 0px 1px 6px 1px;
+}
+/* 
+#accordion {
+  background-color: #939393 !important;
+} */
+
+#accordion .ant-card-bordered:hover {
+  background-color: #33195a;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+#accordion .ant-card-body > h4 {
+  color: #faad14;
+}

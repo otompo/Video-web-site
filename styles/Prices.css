@@ -1,0 +1,95 @@
+#showprices .card {
+  height: 100% !important;
+  padding: 0px !important;
+}
+/* 
+
+#showprices .card-body {
+  -moz-box-flex: 1;
+  flex: 1 1 auto;
+  padding: 3rem 1rem;
+  margin-bottom: 10px !important;
+}
+
+#related .card {
+  height: 100% !important;
+}
+
+#showprices .card-title {
+  color: #faad14 !important;
+}
+
+#showprices .react-reveal:hover {
+  background-color: #33195a !important;
+  color: #fff;
+  border: 2px solid #fff;
+} */
+
+#showprices .parent {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  height: 100%;
+}
+
+#showprices .parent .content p {
+  margin-bottom: 3rem !important;
+}
+#showprices .parent .child {
+  padding-right: 10px;
+  flex-grow: 1;
+  width: 33%;
+  position: relative;
+}
+#showprices .parent .child .content {
+  height: 100%;
+  border: 0.5px solid #e0e0e0;
+  /* box-shadow: 0 0 0.1em gray; */
+  border-radius: 5px;
+}
+
+#showprices .parent .child .content:hover {
+  background-color: #33195a !important;
+  color: #fff;
+  border: 2px solid #fff;
+}
+#showprices .parent .child .content video {
+  background-size: cover;
+  width: 100% !important;
+  height: 100% !important;
+  margin-top: -1px;
+}
+
+#showprices .content h5 {
+  padding: 5px;
+  color: #faad14 !important;
+  text-align: center;
+  justify-content: center;
+  font-size: 25px;
+}
+
+#showprices .content p {
+  padding: 5px;
+  font-size: 16px;
+}
+#showprices .content button {
+  position: absolute;
+  bottom: 5px;
+  margin-left: 35%;
+  margin-top: 10px;
+}
+/*--For mobile devices--*/
+@media (max-width: 480px) {
+  #showprices .parent .child .content video {
+    margin-top: -15px;
+  }
+}
+/*-----For desktop devices ------*/
+@media (min-width: 1025px) {
+  #showprices .parent .child .content video {
+    background-size: cover;
+    width: 100% !important;
+    height: 100% !important;
+    margin-top: -9px;
+  }
+}

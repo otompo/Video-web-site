@@ -1,0 +1,50 @@
+.about {
+  margin: 0 0 3rem;
+}
+.about h2 {
+  font-size: 3rem;
+}
+
+.about p:first-of-type {
+  margin: 2.5rem 0;
+}
+
+.about p:nth-child(4) {
+  font-size: 2.8rem;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.about button {
+  margin-top: 1rem;
+}
+
+.about .social-icons {
+  font-size: 1.5rem;
+}
+
+#about .social-icons > a {
+  color: #fff;
+  height: 2.5rem;
+  width: 3.5rem;
+  margin: 5px;
+  background-color: #000;
+  border-radius: 100%;
+  justify-content: center;
+  text-align: center;
+}
+
+#about .social-icons > a:hover {
+  background-color: #f58220;
+}
+
+@media screen and (max-width: 940px) {
+  .about img {
+    padding: 0rem;
+    width: 90vw;
+  }
+
+  .about button {
+    margin-bottom: 1rem;
+  }
+}
