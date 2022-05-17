@@ -78,6 +78,7 @@ const UserProfilePage = () => {
         payload: data,
       });
       Cookies.set('user', data);
+      toast.success('Success');
     } catch (err) {
       console.log(err.response.data.message);
       // toast.error(err.response.data.message);
@@ -430,7 +431,7 @@ const UserProfilePage = () => {
                     />
                   </div>
 
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <textarea
                       name="bio"
                       cols="7"
@@ -439,15 +440,8 @@ const UserProfilePage = () => {
                       className="form-control"
                       onChange={handleChange}
                     ></textarea>
-                  </div>
-                  <input
-                    type="file"
-                    name="profileImage"
-                    size="large"
-                    onChange={handleChange}
-                    accept="image/*"
-                    hidden
-                  />
+                  </div> */}
+
                   <div className="d-grid gap-2 my-2">
                     <button
                       // disabled={values.loading}

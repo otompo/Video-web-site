@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import AppError from '../utils/appError';
 import catchAsync from '../utils/catchAsync';
 import bcrypt from 'bcryptjs';
+import { signToken } from '../utils/auth';
 var cloudinary = require('cloudinary');
 
 const awsConfig = {
@@ -113,24 +114,24 @@ export const imageRemove = async (req, res) => {
 
 export const updateUserProfile = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id);
-  if (!user) {
-    return next(new AppError('User not found', 404));
-  }
-
-  // console.log(req.body.profileImage);
-  const userUpdated = await User.findByIdAndUpdate(
-    user._id,
-    {
-      name: req.body.name,
-      email: req.body.email,
-      bio: req.body.bio,
-      facebook: req.body.facebook,
-      twitter: req.body.twitter,
-      linkedIn: req.body.linkedIn,
-    },
-    { new: true },
-  );
-  res.status(200).json(userUpdated);
+  user.name = req.body.name;
+  user.email = req.body.email;
+  await user.save();
+  const token = signToken(user);
+  res.send({
+    token,
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    last_login_date: user.last_login_date,
+    profileImage: user.profileImage,
+    picture: user.picture,
+    facebook: user.facebook,
+    twitter: user.twitter,
+    linkedIn: user.linkedIn,
+    generatedPasword: user.generatedPasword,
+  });
 });
 
 // upload image using cloudinary
