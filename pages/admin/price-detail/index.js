@@ -17,20 +17,7 @@ const Index = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
-  }, []);
-  return (
-    <>
-      {!user || (user && !user.isAdmin) ? (
-        <PageLoader />
-      ) : (
-        <ManagePriceDetail />
-      )}
-    </>
-  );
+  return <ManagePriceDetail />;
 };
 
 export default Index;

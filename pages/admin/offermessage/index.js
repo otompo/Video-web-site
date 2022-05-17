@@ -16,21 +16,7 @@ const Index = () => {
       router.push('/');
     }
   }, []);
-
-  useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
-  }, []);
-  return (
-    <>
-      {!user || (user && !user.isAdmin) ? (
-        <PageLoader />
-      ) : (
-        <ManageOfferMessage />
-      )}
-    </>
-  );
+  return <ManageOfferMessage />;
 };
 
 export default Index;

@@ -13,17 +13,14 @@ const Index = () => {
 
   useEffect(() => {
     if (!user) {
-      router.push('/');
+      return router.push('/');
     }
   }, []);
 
-  useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
-  }, []);
   return (
-    <>{!user || (user && !user.isAdmin) ? <PageLoader /> : <ManagePrices />}</>
+    <>
+      <ManagePrices />
+    </>
   );
 };
 

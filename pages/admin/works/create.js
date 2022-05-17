@@ -13,18 +13,10 @@ const CreateBlog = () => {
 
   useEffect(() => {
     if (!user) {
-      router.push('/');
+      return router.push('/');
     }
   }, []);
-
-  useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
-  }, []);
-  return (
-    <>{!user || (user && !user.isAdmin) ? <PageLoader /> : <CreateNewWork />}</>
-  );
+  return <CreateNewWork />;
 };
 
 export default CreateBlog;

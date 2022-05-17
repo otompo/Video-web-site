@@ -51,7 +51,6 @@ const Login = () => {
         payload: data,
       });
       // save in local storage
-      window.localStorage.setItem('userInfor', JSON.stringify(data));
       Cookies.set('user', data);
       router.push('/user');
       toast.success('SignIn Success');

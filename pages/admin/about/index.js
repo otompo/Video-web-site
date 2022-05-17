@@ -6,26 +6,15 @@ import { useRouter } from 'next/router';
 
 const Index = () => {
   const router = useRouter();
-  const {
-    state: { user },
-    dispatch,
-  } = useContext(Context);
-
+  const { state, dispatch } = useContext(Context);
+  const { user } = state;
   useEffect(() => {
     if (!user) {
       router.push('/');
     }
   }, []);
 
-  useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
-  }, []);
-
-  return (
-    <>{!user || (user && !user.isAdmin) ? <PageLoader /> : <ManageAbout />}</>
-  );
+  return <ManageAbout />;
 };
 
 export default Index;

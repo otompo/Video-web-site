@@ -32,10 +32,14 @@ const UserProfilePage = () => {
   const [passwordCurrent, setPasswordCurrent] = useState('');
   const [password, setPassword] = useState('');
 
-  const {
-    state: { user },
-    dispatch,
-  } = useContext(Context);
+  const { state, dispatch } = useContext(Context);
+  const { user } = state;
+
+  useEffect(() => {
+    if (!user) {
+      return router.push('/');
+    }
+  }, []);
 
   useEffect(() => {
     loadUser();
@@ -62,7 +66,6 @@ const UserProfilePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setValues({ ...values, loading: true });
       const { data } = await axios.put(
         `/api/user/update`,
         {
@@ -70,23 +73,14 @@ const UserProfilePage = () => {
         },
         { headers: { authorization: `Bearer ${user.token}` } },
       );
-
-      const as = JSON.parse(await window.localStorage.getItem('userInfor'));
-      as.user = data;
-      // const ascos = Cookies.get('user');
-      // console.log(ascos);
       dispatch({
-        type: 'UPDATE',
-        payload: as.user,
+        type: 'LOGIN',
+        payload: data,
       });
-      Cookies.set('user', as.user);
-      toast.success('Success');
-      setValues({ ...values, loading: false });
-      //   updateUser(data);
+      Cookies.set('user', data);
     } catch (err) {
-      console.log(err.response);
+      console.log(err.response.data.message);
       // toast.error(err.response.data.message);
-      setValues({ ...values, loading: false });
     }
   };
 
@@ -129,13 +123,11 @@ const UserProfilePage = () => {
         },
         { headers: { authorization: `Bearer ${user.token}` } },
       );
-      const as = JSON.parse(await window.localStorage.getItem('userInfor'));
-      as.user = data;
       dispatch({
-        type: 'UPDATE',
-        payload: as.user,
+        type: 'LOGIN',
+        payload: data,
       });
-      Cookies.set('user', as.user);
+      Cookies.set('user', data);
       setSaving(false);
       toast.success('Image Saved');
     } catch (err) {

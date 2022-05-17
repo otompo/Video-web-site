@@ -17,14 +17,7 @@ const SingleMessageIndex = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
-  }, []);
-  return (
-    <>{!user || (user && !user.isAdmin) ? <PageLoader /> : <SingleMessage />}</>
-  );
+  return <SingleMessage />;
 };
 
 export default SingleMessageIndex;

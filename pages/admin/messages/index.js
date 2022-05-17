@@ -17,16 +17,7 @@ const MessagesIndex = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
-  }, []);
-  return (
-    <>
-      {!user || (user && !user.isAdmin) ? <PageLoader /> : <ManageMessages />}
-    </>
-  );
+  return <ManageMessages />;
 };
 
 export default MessagesIndex;

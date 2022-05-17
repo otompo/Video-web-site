@@ -47,7 +47,7 @@ const UserIndex = () => {
       ) : (
         <Layout title="Dashboard">
           <UserRouter>
-            {/* <pre> {JSON.stringify(user, null, 4)}</pre> */}
+            <pre> {JSON.stringify(user, null, 4)}</pre>
           </UserRouter>
         </Layout>
       )}

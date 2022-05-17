@@ -7,14 +7,18 @@ const isAuth = async (req, res, next) => {
   if (authorization) {
     // Bearer xxx => xxx
     const token = authorization.slice(7, authorization.length);
-    jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
-      if (err) {
-        res.status(401).send({ message: 'Token is not valid' });
-      } else {
-        req.user = decode;
-        next();
-      }
-    });
+    jwt.verify(
+      token,
+      process.env.JWT_SECRET || 'sfskftsfdssdsp3405059o53H530smdslf',
+      (err, decode) => {
+        if (err) {
+          res.status(401).send({ message: 'Token is not valid' });
+        } else {
+          req.user = decode;
+          next();
+        }
+      },
+    );
   } else {
     res.status(401).send({ message: 'Token is not suppiled' });
   }

@@ -17,14 +17,7 @@ const Index = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
-  }, []);
-  return (
-    <>{!user || (user && !user.isAdmin) ? <PageLoader /> : <ManageReviews />}</>
-  );
+  return <ManageReviews />;
 };
 
 export default Index;

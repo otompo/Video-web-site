@@ -17,15 +17,7 @@ const Index = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
-  }, []);
-
-  return (
-    <>{!user || (user && !user.isAdmin) ? <PageLoader /> : <EditAbout />}</>
-  );
+  return <EditAbout />;
 };
 
 export default Index;
