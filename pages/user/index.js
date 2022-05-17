@@ -5,7 +5,7 @@ import { Context } from '../../context';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import PageLoader from '../../components/layout/PageLoader';
-
+import moment from 'moment';
 const UserIndex = () => {
   const router = useRouter();
   const [current, setCurrent] = useState('');
@@ -47,7 +47,26 @@ const UserIndex = () => {
       ) : (
         <Layout title="Dashboard">
           <UserRouter>
-            <pre> {JSON.stringify(user, null, 4)}</pre>
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-12">
+                  <di className="card">
+                    <div className="card-body">
+                      <h4 className="d-inline">
+                        Welcome Back{' '}
+                        <span className="text-primary lead">{user.name}</span>
+                      </h4>{' '}
+                      <h4 className="d-inline">
+                        Last Login{' '}
+                        <span className="text-primary lead">
+                          {moment(user.last_login_date).format('LL')}
+                        </span>
+                      </h4>
+                    </div>
+                  </di>
+                </div>
+              </div>
+            </div>
           </UserRouter>
         </Layout>
       )}

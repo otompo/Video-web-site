@@ -14,11 +14,11 @@ const awsConfig = {
   apiVersion: process.env.AWS_API_VERSION,
 };
 
-cloudinary.config({
-  cloud_name: 'codesmart',
-  api_key: '924552959278257',
-  api_secret: 'nyl74mynmNWo5U0rzF8LqzcCE8U',
-});
+// cloudinary.config({
+//   cloud_name: 'codesmart',
+//   api_key: '924552959278257',
+//   api_secret: 'nyl74mynmNWo5U0rzF8LqzcCE8U',
+// });
 
 const S3 = new AWS.S3(awsConfig);
 
@@ -65,6 +65,7 @@ export const imageUpload = catchAsync(async (req, res) => {
 // // update user profile image
 export const updateImage = catchAsync(async (req, res) => {
   const user = await User.findById(req.user._id);
+  user.profileImage = req.body.profileImage;
   if (user && user.profileImage) {
     const params = {
       Bucket: user.profileImage.Bucket,
@@ -78,14 +79,47 @@ export const updateImage = catchAsync(async (req, res) => {
       }
     });
   }
-  const userUpdated = await User.findByIdAndUpdate(
-    user._id,
-    {
-      profileImage: req.body.profileImage,
-    },
-    { new: true },
-  );
-  res.status(200).json(userUpdated);
+  const token = signToken(user);
+  await user.save();
+  res.status(200).json({
+    token,
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    last_login_date: user.last_login_date,
+    profileImage: user.profileImage,
+    picture: user.picture,
+    facebook: user.facebook,
+    twitter: user.twitter,
+    linkedIn: user.linkedIn,
+    generatedPasword: user.generatedPasword,
+  });
+});
+
+export const updateUserProfile = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  user.name = req.body.name;
+  user.email = req.body.email;
+  user.facebook = req.body.facebook;
+  user.twitter = req.body.twitter;
+  user.linkedIn = req.body.linkedIn;
+  await user.save();
+  const token = signToken(user);
+  res.send({
+    token,
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    last_login_date: user.last_login_date,
+    profileImage: user.profileImage,
+    picture: user.picture,
+    facebook: user.facebook,
+    twitter: user.twitter,
+    linkedIn: user.linkedIn,
+    generatedPasword: user.generatedPasword,
+  });
 });
 
 export const imageRemove = async (req, res) => {
@@ -110,53 +144,6 @@ export const imageRemove = async (req, res) => {
   }
 };
 
-// Update user profile =>/api/profile/update
-
-export const updateUserProfile = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-  user.name = req.body.name;
-  user.email = req.body.email;
-  await user.save();
-  const token = signToken(user);
-  res.send({
-    token,
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    isAdmin: user.isAdmin,
-    last_login_date: user.last_login_date,
-    profileImage: user.profileImage,
-    picture: user.picture,
-    facebook: user.facebook,
-    twitter: user.twitter,
-    linkedIn: user.linkedIn,
-    generatedPasword: user.generatedPasword,
-  });
-});
-
-// upload image using cloudinary
-export const uploadProfileImage = catchAsync(async (req, res, next) => {
-  // console.log(req.user._id);
-  const result = await cloudinary.v2.uploader.upload(req.body.image, {
-    public_id: nanoid(),
-    folder: 'linksdaily/img',
-  });
-
-  const user = await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      profileImage: {
-        public_id: result.public_id,
-        url: result.secure_url,
-      },
-    },
-    { new: true },
-  );
-  return res.json({
-    image: user.image,
-  });
-});
-
 // make user an admin
 export const makeUserAdmin = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.query.id);
@@ -174,22 +161,26 @@ export const makeUserAdmin = catchAsync(async (req, res, next) => {
   res.send({ ok: true });
   // console.log(roleUpdated);
 });
-// export const makeUserAdmin = catchAsync(async (req, res, next) => {
-//   const user = await User.findById(req.query.id);
-//   if (!user) {
-//     return next(new AppError('User not found', 404));
-//   }
 
-//   const roleUpdated = await User.findByIdAndUpdate(
-//     user._id,
-//     {
-//       $addToSet: { role: 'Admin' },
-//     },
-//     { new: true },
-//   );
-//   res.send({ ok: true });
-//   // console.log(roleUpdated);
-// });
+export const updatePassword = catchAsync(async (req, res, next) => {
+  // Get the user from the database
+  const user = await User.findById(req.user._id).select('+password');
+
+  // Check id the Posted current password is correct
+  if (!bcrypt.compareSync(req.body.passwordCurrent, user.password)) {
+    return next(new AppError('your current password is wrong', 401));
+  }
+
+  // If password is correct update password
+  user.password = bcrypt.hashSync(req.body.password);
+  user.generatedPasword = '';
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  res.status(200).json({
+    success: true,
+    message: 'Password updated successfully',
+  });
+});
 
 // remove user as an admin
 export const removeUserAsAdmin = catchAsync(async (req, res, next) => {
@@ -206,48 +197,6 @@ export const removeUserAsAdmin = catchAsync(async (req, res, next) => {
   );
   res.send({ ok: true });
   // console.log(roleUpdated);
-});
-// export const removeUserAsAdmin = catchAsync(async (req, res, next) => {
-//   const user = await User.findById(req.query.id);
-//   if (!user) {
-//     return next(new AppError('User not found', 404));
-//   }
-//   const roleUpdated = await User.findByIdAndUpdate(
-//     user._id,
-//     {
-//       $pull: { role: 'Admin' },
-//     },
-//     { new: true },
-//   );
-//   res.send({ ok: true });
-//   // console.log(roleUpdated);
-// });
-// make user a saff by an admin
-export const makeUserStaff = catchAsync(async (req, res, next) => {
-  if (req.body.password || req.body.passwordConfirm) {
-    return next(
-      new AppError(
-        'This route is not for password update. Please use/ updateMyPassword',
-        400,
-      ),
-    );
-  }
-
-  const id = req.params.id;
-  const user = await User.findByIdAndUpdate(
-    id,
-    {
-      $addToSet: { role: 'Staff' },
-    },
-    { new: true },
-  ).exec();
-  if (!user) {
-    return next(new AppError('User not found', 400));
-  }
-  res.status(200).json({
-    status: 'Success',
-    message: `${user.name} is now a staff`,
-  });
 });
 
 // get users
@@ -290,30 +239,4 @@ export const readSingleUser = catchAsync(async (req, res, next) => {
     return next(new AppError('User not found', 404));
   }
   res.send(user);
-});
-
-export const updatePassword = catchAsync(async (req, res, next) => {
-  // Get the user from the database
-  const user = await User.findById(req.user._id).select('+password');
-
-  // Check id the Posted current password is correct
-
-  if (!bcrypt.compareSync(req.body.passwordCurrent, user.password)) {
-    return next(new AppError('your current password is wrong', 401));
-  }
-
-  // If password is correct update password
-  user.password = bcrypt.hashSync(req.body.password);
-  user.generatedPasword = '';
-  user.passwordConfirm = req.body.passwordConfirm;
-  await user.save();
-
-  //Log user in, send password
-
-  // createSendToken(user, 200, res);
-  // const token = signToken(user._id);
-  res.status(200).json({
-    success: true,
-    message: 'Password updated successfully',
-  });
 });
