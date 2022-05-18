@@ -250,7 +250,7 @@ const ManageAbout = () => {
                 <div className="col-md-4">
                   <h1 className="lead">Manage About</h1>
                 </div>
-                <div className="col-md-4 offset-md-2">
+                {/* <div className="col-md-4 offset-md-2">
                   <p
                     className="btn text-white float-right btn-success"
                     onClick={showModal}
@@ -258,7 +258,7 @@ const ManageAbout = () => {
                     {' '}
                     Add New About
                   </p>
-                </div>
+                </div> */}
                 <Modal
                   title="Add About"
                   visible={isModalVisible}
