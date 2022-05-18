@@ -63,9 +63,7 @@ const ManageUsers = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {
@@ -82,9 +80,7 @@ const ManageUsers = () => {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/users`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/users`);
       setUsers(data);
       setLoading(false);
     } catch (err) {
@@ -111,7 +107,6 @@ const ManageUsers = () => {
           // send request to server
           const { data } = await axios.delete(
             `/api/admin/users/${removed[0]._id}`,
-            { headers: { authorization: `Bearer ${user.token}` } },
           );
           toast.success('User Deleted Successfully');
           setSuccess(false);
@@ -142,7 +137,6 @@ const ManageUsers = () => {
           // setSuccess(true);
           const { data } = await axios.put(
             `/api/admin/users/removeadmin/${removed[0]._id}`,
-            { headers: { authorization: `Bearer ${user.token}` } },
           );
           // setUsers(allusers);
           toast.success('Removed Successfully');
@@ -162,9 +156,7 @@ const ManageUsers = () => {
   const makeUserAnAdmin = async (e, id) => {
     try {
       setSuccess(true);
-      const { data } = await axios.put(`/api/admin/users/addadmin/${id}`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.put(`/api/admin/users/addadmin/${id}`);
       setSuccess(false);
       toast.success('Great! User is now an admin');
     } catch (err) {
@@ -183,13 +175,9 @@ const ManageUsers = () => {
     try {
       setValues({ ...values, name: '', email: '', loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/addstaff`,
-        {
-          ...values,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/addstaff`, {
+        ...values,
+      });
       toast.success('Success');
       setValues({ ...values, name: '', email: '', loading: false });
       setSuccess(false);

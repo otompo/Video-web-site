@@ -43,9 +43,7 @@ const ManageOfferMessages = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {
@@ -58,9 +56,7 @@ const ManageOfferMessages = () => {
   const loadMessages = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/offermessages`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/offermessages`);
       setMessages(data);
       setLoading(false);
     } catch (err) {

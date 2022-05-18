@@ -76,9 +76,7 @@ const ManagePartness = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/partness`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/partness`);
       setPartness(data.partners);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -94,14 +92,10 @@ const ManagePartness = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/partness`,
-        {
-          ...values,
-          profileImage,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/partness`, {
+        ...values,
+        profileImage,
+      });
       toast.success('Success');
       setValues({ ...values, name: '', loading: false });
       setImagePreview('');
@@ -122,13 +116,9 @@ const ManagePartness = () => {
     // resize image and send image to backend
     Resizer.imageFileResizer(file, 720, 500, 'JPEG', 100, 0, async (uri) => {
       try {
-        let { data } = await axios.post(
-          `/api/user/profileimage`,
-          {
-            profileImage: uri,
-          },
-          { headers: { authorization: `Bearer ${user.token}` } },
-        );
+        let { data } = await axios.post(`/api/user/profileimage`, {
+          profileImage: uri,
+        });
         // set image in the state
         setProfileImage(data);
         setLoading(false);
@@ -144,9 +134,7 @@ const ManagePartness = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {
@@ -174,7 +162,6 @@ const ManagePartness = () => {
           // send request to server
           const { data } = axios.delete(
             `/api/admin/partness/${removed[0]._id}`,
-            { headers: { authorization: `Bearer ${user.token}` } },
           );
           toast.success('Deleted Successfully');
           setValues({ ...values, loading: false });

@@ -26,9 +26,7 @@ const UserProfilePage = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       if (data.ok) setOk(true);
     } catch (err) {
       console.log(err);

@@ -76,9 +76,7 @@ const ManageServices = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/services`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/services`);
       setServices(data.services);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -94,14 +92,10 @@ const ManageServices = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/services`,
-        {
-          ...values,
-          profileImage,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/services`, {
+        ...values,
+        profileImage,
+      });
       toast.success('Success');
       setValues({ ...values, title: '', description: '', loading: false });
       setImagePreview('');
@@ -122,13 +116,9 @@ const ManageServices = () => {
     // resize image and send image to backend
     Resizer.imageFileResizer(file, 720, 500, 'JPEG', 100, 0, async (uri) => {
       try {
-        let { data } = await axios.post(
-          `/api/user/profileimage`,
-          {
-            profileImage: uri,
-          },
-          { headers: { authorization: `Bearer ${user.token}` } },
-        );
+        let { data } = await axios.post(`/api/user/profileimage`, {
+          profileImage: uri,
+        });
         // set image in the state
         setProfileImage(data);
         setLoading(false);
@@ -160,7 +150,6 @@ const ManageServices = () => {
           // send request to server
           const { data } = axios.delete(
             `/api/admin/services/${removed[0]._id}`,
-            { headers: { authorization: `Bearer ${user.token}` } },
           );
           toast.success('Deleted Successfully');
           setValues({ ...values, loading: false });
@@ -177,9 +166,7 @@ const ManageServices = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {

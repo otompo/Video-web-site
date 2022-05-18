@@ -20,10 +20,8 @@ const UserNav = () => {
   }, [process.browser && window.location.pathname]);
 
   const logout = async () => {
-    dispatch({ type: 'REMOVE_USERINFO' });
     dispatch({ type: 'LOGOUT' });
     Cookies.remove('user');
-    window.localStorage.removeItem('userInfor');
     router.push('/');
   };
 

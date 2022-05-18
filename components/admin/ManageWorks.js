@@ -74,9 +74,7 @@ const ManageWorks = () => {
 
   const loadCategories = async () => {
     try {
-      const { data } = await axios.get(`/api/admin/category`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/category`);
       setCategories(data.category);
     } catch (err) {
       console.log(err);
@@ -88,15 +86,11 @@ const ManageWorks = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/ourworks`,
-        {
-          ...values,
-          video,
-          selectedCategory,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/ourworks`, {
+        ...values,
+        video,
+        selectedCategory,
+      });
       toast.success('Success');
       setValues({ ...values, name: '', description: '', loading: false });
       setSuccess(false);
@@ -139,9 +133,7 @@ const ManageWorks = () => {
   const showourWorks = async () => {
     try {
       setValues({ ...values, loading: true });
-      const { data } = await axios.get(`/api/admin/ourworks`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/ourworks`);
       setOurWorks(data);
       setValues({ ...values, loading: false });
     } catch (err) {
@@ -171,7 +163,6 @@ const ManageWorks = () => {
           // send request to server
           const { data } = await axios.delete(
             `/api/admin/ourworks/${removed[0]._id}`,
-            { headers: { authorization: `Bearer ${user.token}` } },
           );
           // console.log('LESSON DELETED =>', data);
           toast.success('Work Deleted Successfully');
@@ -189,9 +180,7 @@ const ManageWorks = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       if (data.ok) setOkey(true);
     } catch (err) {
       console.log(err);

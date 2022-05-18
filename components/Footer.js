@@ -5,23 +5,6 @@ import moment from 'moment';
 const Footer = () => {
   return (
     <div className="footer-container">
-      {/* <section className="footer-subscription">
-        <p className="footer-subscription-heading">
-          Data protection and privacy
-        </p>
-        <p className="footer-subscription-text">
-          We take your privacy very seriously. I store all my photos in Dropbox,
-          which is compliant with all the latest data protection standards.
-          Sometimes I post selected videos to my blog and my social media
-          accounts. I do that only after your explicit consent Needless to say,
-          I ask first and do not post anything anywhere unless we agreed about
-          it. I do not record personally identifiable data in website logs, but
-          I use standard features of Google Analytics to analyze aggregated
-          visitor behaviour on my website. At your request I will send you all
-          your videos that I currently keep in my storage. I will also delete
-          all your videos that I store at your request
-        </p>
-      </section> */}
       <div className="footer-links">
         <div className="footer-link-wrapper">
           <div className="footer-link-items">

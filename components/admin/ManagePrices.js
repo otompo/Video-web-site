@@ -75,9 +75,7 @@ const ManagePrices = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/prices`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/prices`);
       setPrices(data);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -93,14 +91,10 @@ const ManagePrices = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/prices`,
-        {
-          ...values,
-          video,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/prices`, {
+        ...values,
+        video,
+      });
       toast.success('Success');
       setValues({ ...values, name: '', description: '', loading: false });
       setSuccess(false);
@@ -156,9 +150,7 @@ const ManagePrices = () => {
           const removed = allPrices.splice(index, 1);
           setPrices(allPrices);
           // send request to server
-          const { data } = axios.delete(`/api/admin/prices/${removed[0]._id}`, {
-            headers: { authorization: `Bearer ${user.token}` },
-          });
+          const { data } = axios.delete(`/api/admin/prices/${removed[0]._id}`);
           toast.success('Price Deleted Successfully');
           setValues({ ...values, loading: false });
         },
@@ -174,9 +166,7 @@ const ManagePrices = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {

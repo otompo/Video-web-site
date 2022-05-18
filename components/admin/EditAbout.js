@@ -49,9 +49,7 @@ const EditAbout = () => {
   const loadSingleAbout = async () => {
     try {
       //   setOk(true);
-      const { data } = await axios.get(`/api/admin/about/${slug}`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/about/${slug}`);
       setValues(data);
       //   setOk(false);
     } catch (err) {
@@ -64,13 +62,9 @@ const EditAbout = () => {
     e.preventDefault();
     try {
       setOk(true);
-      const { data } = await axios.put(
-        `/api/admin/about/${slug}`,
-        {
-          video,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.put(`/api/admin/about/${slug}`, {
+        video,
+      });
       setOk(false);
       setProgress(0);
       setVideo({});
@@ -87,13 +81,9 @@ const EditAbout = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.patch(
-        `/api/admin/about/${slug}`,
-        {
-          ...values,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.patch(`/api/admin/about/${slug}`, {
+        ...values,
+      });
       toast.success('Success');
       setValues({ ...values, description: '', loading: false });
       setSuccess(false);
@@ -135,9 +125,7 @@ const EditAbout = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {

@@ -1,5 +1,6 @@
 import { useReducer, createContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 // initial state
 const initialState = {
@@ -25,6 +26,13 @@ const rootReducer = (state, action) => {
 // context provider
 export const Provider = ({ children }) => {
   const [state, dispatch] = useReducer(rootReducer, initialState);
+
+  // config axios
+  const token = state && state.user && state.user.token ? state.user.token : '';
+  //   configure axios
+  // console.log("token", token);
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
   return (
     <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>
   );

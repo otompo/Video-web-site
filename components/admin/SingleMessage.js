@@ -56,14 +56,10 @@ const SingleMessage = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/messages/${id}`,
-        {
-          ...values,
-          replyedMessage,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/messages/${id}`, {
+        ...values,
+        replyedMessage,
+      });
       // console.log(data);
       setValues({ ...values, email: '', loading: false });
       setReplyedMessage({});
@@ -79,9 +75,7 @@ const SingleMessage = () => {
 
   const loadMessage = async () => {
     try {
-      const { data } = await axios.get(`/api/admin/messages/${id}`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/messages/${id}`);
       setMessage(data);
     } catch (err) {
       console.log(err);
@@ -90,9 +84,7 @@ const SingleMessage = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {

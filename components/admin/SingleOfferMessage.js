@@ -55,9 +55,7 @@ const SingleOfferMessage = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {
@@ -72,14 +70,10 @@ const SingleOfferMessage = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/offermessages/${id}`,
-        {
-          ...values,
-          replyedMessage,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/offermessages/${id}`, {
+        ...values,
+        replyedMessage,
+      });
       // console.log(data);
       setValues({ ...values, email: '', loading: false });
       setReplyedMessage({});
@@ -95,9 +89,7 @@ const SingleOfferMessage = () => {
 
   const loadMessage = async () => {
     try {
-      const { data } = await axios.get(`/api/admin/offermessages/${id}`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/offermessages/${id}`);
       setMessage(data);
     } catch (err) {
       console.log(err);

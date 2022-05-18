@@ -45,9 +45,7 @@ const Navbar = () => {
   const loadCurrentUser = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('/api/user/profile', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/profile');
       // console.log(data);
       setCurrentUser(data);
       setLoading(false);

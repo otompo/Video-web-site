@@ -71,9 +71,7 @@ const ManageCategories = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/category`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/category`);
       setCategories(data.category);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -89,14 +87,10 @@ const ManageCategories = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/category`,
-        {
-          ...values,
-          profileImage,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/category`, {
+        ...values,
+        profileImage,
+      });
       toast.success('Success');
       setValues({ ...values, title: '', description: '', loading: false });
       setImagePreview('');
@@ -117,13 +111,9 @@ const ManageCategories = () => {
     // resize image and send image to backend
     Resizer.imageFileResizer(file, 720, 500, 'JPEG', 100, 0, async (uri) => {
       try {
-        let { data } = await axios.post(
-          `/api/user/profileimage`,
-          {
-            profileImage: uri,
-          },
-          { headers: { authorization: `Bearer ${user.token}` } },
-        );
+        let { data } = await axios.post(`/api/user/profileimage`, {
+          profileImage: uri,
+        });
         // set image in the state
         setProfileImage(data);
         setLoading(false);
@@ -171,9 +161,7 @@ const ManageCategories = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {

@@ -35,9 +35,7 @@ const Dashboard = ({ children }) => {
   const showourWorks = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/ourworks`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/ourworks`);
       setOurWorks(data);
       setLoading(false);
     } catch (err) {
@@ -49,9 +47,7 @@ const Dashboard = ({ children }) => {
   const showCategory = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/category`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/category`);
       //console.log(data);
       setCategory(data.total);
       setLoading(false);
@@ -64,9 +60,7 @@ const Dashboard = ({ children }) => {
   const getTotalUsers = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/users`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/users`);
       // console.log(data);
       setUsersTotal(data);
       setLoading(false);
@@ -78,9 +72,7 @@ const Dashboard = ({ children }) => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOk(true);
     } catch (err) {

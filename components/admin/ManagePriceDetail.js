@@ -94,9 +94,7 @@ const ManagePriceDetail = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {
@@ -109,9 +107,7 @@ const ManagePriceDetail = () => {
   const showPrices = async () => {
     try {
       setOk(true);
-      const { data } = await axios.get(`/api/admin/prices`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/prices`);
       setPrices(data);
       setOk(false);
     } catch (err) {
@@ -125,16 +121,12 @@ const ManagePriceDetail = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/featureprice`,
-        {
-          ...values,
-          selectedCategory,
-          inputList,
-          // video,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/featureprice`, {
+        ...values,
+        selectedCategory,
+        inputList,
+        // video,
+      });
       toast.success('Success');
       setValues({ ...values, title: '', price: '', loading: false });
       setSelectedCategory('');
@@ -156,16 +148,11 @@ const ManagePriceDetail = () => {
       videoData.append('video', file);
       //   console.log(file);
       // save progress bar and send video as form data to backend
-      const { data } = await axios.post(
-        `/api/upload/video`,
-        { headers: { authorization: `Bearer ${user.token}` } },
-        videoData,
-        {
-          onUploadProgress: (e) => {
-            setProgress(Math.round((100 * e.loaded) / e.total));
-          },
+      const { data } = await axios.post(`/api/upload/video`, videoData, {
+        onUploadProgress: (e) => {
+          setProgress(Math.round((100 * e.loaded) / e.total));
         },
-      );
+      });
       // once response is received
       //   console.log(data);
       setVideo(data);
@@ -184,9 +171,7 @@ const ManagePriceDetail = () => {
   const showFeaturePrices = async () => {
     try {
       setValues({ ...values, loading: true });
-      const { data } = await axios.get(`/api/admin/featureprice`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/featureprice`);
       setFeaturprices(data);
       setValues({ ...values, loading: false });
     } catch (err) {

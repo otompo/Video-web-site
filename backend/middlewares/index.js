@@ -1,5 +1,3 @@
-import AppError from '../utils/appError';
-import catchAsync from '../utils/catchAsync';
 import jwt from 'jsonwebtoken';
 
 const isAuth = async (req, res, next) => {

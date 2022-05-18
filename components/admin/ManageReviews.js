@@ -73,9 +73,7 @@ const ManageReviews = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/reviews`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/reviews`);
       setReviews(data);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -92,14 +90,10 @@ const ManageReviews = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/reviews`,
-        {
-          ...values,
-          video,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/reviews`, {
+        ...values,
+        video,
+      });
       toast.success('Success');
       setValues({ ...values, name: '', loading: false });
       setImagePreview('');
@@ -156,10 +150,7 @@ const ManageReviews = () => {
           const removed = allReview.splice(index, 1);
           setReviews(allReview);
           // send request to server
-          const { data } = axios.delete(
-            `/api/admin/reviews/${removed[0]._id}`,
-            { headers: { authorization: `Bearer ${user.token}` } },
-          );
+          const { data } = axios.delete(`/api/admin/reviews/${removed[0]._id}`);
           toast.success('Reviews Deleted Successfully');
           setValues({ ...values, loading: false });
         },
@@ -175,9 +166,7 @@ const ManageReviews = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {

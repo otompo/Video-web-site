@@ -1,6 +1,5 @@
 import User from '../models/userModel';
-import jwt from 'jsonwebtoken';
-import { comparePassword, hashPassword } from '../utils/authHelpers';
+import { hashPassword } from '../utils/authHelpers';
 import AWS from 'aws-sdk';
 import { nanoid } from 'nanoid';
 import bcrypt from 'bcryptjs';

@@ -42,9 +42,7 @@ const ManageMessages = () => {
   const loadMessages = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/admin/messages`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/messages`);
       setMessages(data);
       setLoading(false);
     } catch (err) {
@@ -72,7 +70,6 @@ const ManageMessages = () => {
           // send request to server
           const { data } = await axios.delete(
             `/api/admin/messages/${removed[0]._id}`,
-            { headers: { authorization: `Bearer ${user.token}` } },
           );
           // console.log('LESSON DELETED =>', data);
           toast.success('Message Deleted Successfully');
@@ -91,9 +88,7 @@ const ManageMessages = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {

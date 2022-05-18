@@ -74,9 +74,7 @@ const ManageAbout = () => {
     try {
       setValues({ ...values, loading: true });
       setOk(true);
-      const { data } = await axios.get(`/api/admin/about`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/admin/about`);
       setAbouts(data);
       setValues({ ...values, loading: false });
       setOk(false);
@@ -92,14 +90,10 @@ const ManageAbout = () => {
     try {
       setValues({ ...values, loading: true });
       setSuccess(true);
-      const { data } = await axios.post(
-        `/api/admin/about`,
-        {
-          ...values,
-          video,
-        },
-        { headers: { authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.post(`/api/admin/about`, {
+        ...values,
+        video,
+      });
       toast.success('Success');
       setValues({ ...values, description: '', loading: false });
       setSuccess(false);
@@ -171,9 +165,7 @@ const ManageAbout = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {
