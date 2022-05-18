@@ -7,7 +7,7 @@ const ServiceCard = ({ icon, title, body }) => {
   return (
     <Fragment>
       <Zoom>
-        <div
+        {/* <div
           className="card"
           style={{ height: '100%', backgroundColor: '#fff' }}
         >
@@ -20,6 +20,14 @@ const ServiceCard = ({ icon, title, body }) => {
               {title}
             </h5>
             <p className="card-text">{body}</p>
+          </div>
+        </div> */}
+        <div className="parent">
+          <div className="child">
+            <div className="content">
+              <h5 className="mt-3">{title}</h5>
+              <p className="mx-3">{body}</p>
+            </div>
           </div>
         </div>
       </Zoom>

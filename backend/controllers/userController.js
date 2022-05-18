@@ -66,21 +66,29 @@ export const imageUpload = catchAsync(async (req, res) => {
 export const updateImage = catchAsync(async (req, res) => {
   const user = await User.findById(req.user._id);
   user.profileImage = req.body.profileImage;
-  if (user && user.profileImage) {
-    const params = {
-      Bucket: user.profileImage.Bucket,
-      Key: user.profileImage.Key,
-    };
-    // send remove request to S3
-    S3.deleteObject(params, (err, data) => {
-      if (err) {
-        console.log(err);
-        res.send(400);
-      }
-    });
-  }
-  const token = signToken(user);
   await user.save();
+  // if (user && user.profileImage) {
+  //   const params = {
+  //     Bucket: user.profileImage.Bucket,
+  //     Key: user.profileImage.Key,
+  //   };
+  //   // send remove request to S3
+  //   S3.deleteObject(params, (err, data) => {
+  //     if (err) {
+  //       console.log(err);
+  //       res.send(400);
+  //     }
+  //   });
+  // }
+  const token = signToken(user);
+  // const userUpdated = await User.findByIdAndUpdate(
+  //   user._id,
+  //   {
+  //     profileImage: req.body.profileImage,
+  //   },
+  //   { new: true },
+  // );
+
   res.status(200).json({
     token,
     _id: user._id,
@@ -162,26 +170,6 @@ export const makeUserAdmin = catchAsync(async (req, res, next) => {
   // console.log(roleUpdated);
 });
 
-export const updatePassword = catchAsync(async (req, res, next) => {
-  // Get the user from the database
-  const user = await User.findById(req.user._id).select('+password');
-
-  // Check id the Posted current password is correct
-  if (!bcrypt.compareSync(req.body.passwordCurrent, user.password)) {
-    return next(new AppError('your current password is wrong', 401));
-  }
-
-  // If password is correct update password
-  user.password = bcrypt.hashSync(req.body.password);
-  user.generatedPasword = '';
-  user.passwordConfirm = req.body.passwordConfirm;
-  await user.save();
-  res.status(200).json({
-    success: true,
-    message: 'Password updated successfully',
-  });
-});
-
 // remove user as an admin
 export const removeUserAsAdmin = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.query.id);
@@ -239,4 +227,28 @@ export const readSingleUser = catchAsync(async (req, res, next) => {
     return next(new AppError('User not found', 404));
   }
   res.send(user);
+});
+
+export const updatePassword = catchAsync(async (req, res, next) => {
+  // Get the user from the database
+  const user = await User.findById(req.user._id).select('+password');
+
+  // Check id the Posted current password is correct
+
+  if (!bcrypt.compareSync(req.body.passwordCurrent, user.password)) {
+    return next(new AppError('your current password is wrong', 401));
+  }
+
+  // If password is correct update password
+  user.password = bcrypt.hashSync(req.body.password);
+  user.generatedPasword = '';
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+
+  // createSendToken(user, 200, res);
+  // const token = signToken(user._id);
+  res.status(200).json({
+    success: true,
+    message: 'Password updated successfully',
+  });
 });

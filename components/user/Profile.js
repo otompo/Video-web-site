@@ -10,6 +10,7 @@ import Layout from '../layout/Layout';
 import Loader from '../layout/Loader';
 import { Context } from '../../context';
 import Cookies from 'js-cookie';
+import dynamic from 'next/dynamic';
 
 const UserProfilePage = () => {
   const router = useRouter();
@@ -476,4 +477,5 @@ const UserProfilePage = () => {
   );
 };
 
-export default UserProfilePage;
+// export default UserProfilePage;
+export default dynamic(() => Promise.resolve(UserProfilePage), { ssr: false });

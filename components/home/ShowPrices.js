@@ -102,7 +102,6 @@ function ShowPrices(props) {
             <div
               className="col-md-3 my-4"
               key={item._id}
-              // onClick={showModal}
               onClick={() => {
                 loadModalData(item._id, item.name);
               }}
@@ -122,19 +121,8 @@ function ShowPrices(props) {
                 }
                 title={item && item.name}
                 body={item && item.description}
-                button={
-                  // <Link href={`/prices/${item.slug}`}>
-                  //   <a>
-                  <ButtonComponent title="Get Offer" />
-                  //   </a>
-                  // </Link>
-                }
+                button={<ButtonComponent title="Get Offer" />}
               />
-              {/* <Link href={`/prices/${item.slug}`}>
-                <a>
-                 
-                </a>
-              </Link> */}
             </div>
           ))
         )}

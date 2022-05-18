@@ -2,22 +2,34 @@ import { CaretUpOutlined, TeamOutlined, BookOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useEffect, useState, useContext } from 'react';
 import { Context } from '../../context';
+import { useRouter } from 'next/router';
 import Card from './Card';
+import PageLoader from '../layout/PageLoader';
 
 const Dashboard = ({ children }) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [ourWorks, setOurWorks] = useState([]);
   const [usersTotal, setUsersTotal] = useState([]);
   const [category, setCategory] = useState([]);
+  const [ok, setOk] = useState(false);
+  const { redirect } = router.query;
   const {
     state: { user },
     dispatch,
   } = useContext(Context);
 
   useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
     getTotalUsers();
     showCategory();
     showourWorks();
+    fetchCurrentUser();
   }, []);
 
   const showourWorks = async () => {
@@ -29,8 +41,7 @@ const Dashboard = ({ children }) => {
       setOurWorks(data);
       setLoading(false);
     } catch (err) {
-      console.log(err);
-      toast.error(err.response.data.message);
+      console.log(err.response);
       setLoading(false);
     }
   };
@@ -65,57 +76,47 @@ const Dashboard = ({ children }) => {
     }
   };
 
-  return (
-    <div className="container-fluid" id="admin">
-      <div className="row mt-5">
-        <Card
-          icon={<BookOutlined style={{ color: 'green' }} />}
-          cade_title="Our Works"
-          cade_total={ourWorks.length}
-        />
-        <Card
-          icon={<TeamOutlined style={{ color: 'green' }} />}
-          cade_title="Total Staff"
-          cade_total={usersTotal.length}
-        />
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOk(true);
+    } catch (err) {
+      console.log(err);
+      setOk(false);
+      router.push(redirect || '/');
+    }
+  };
 
-        <Card
-          icon={<CaretUpOutlined style={{ color: 'green' }} />}
-          cade_title="Total Categories"
-          cade_total={category}
-        />
-      </div>
-      <div className="row my-4">
-        {/* <div className="col-md-10 offset-md-1">
-          <div className="card admin_card">
-            <div className="card-body">
-              <h5 className="card-title">Newly Joined Staff</h5>
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Created At</th>
-                    <th scope="col">Email</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users &&
-                    users.map((user) => {
-                      return (
-                        <tr key={user._id}>
-                          <td>{user.name}</td>
-                          <td>{moment(user.createdAt).fromNow()}</td>
-                          <td>{user.email}</td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
+  return (
+    <>
+      {!ok ? (
+        <PageLoader />
+      ) : (
+        <div className="container-fluid" id="admin">
+          <div className="row mt-5">
+            <Card
+              icon={<BookOutlined style={{ color: 'green' }} />}
+              cade_title="Our Works"
+              cade_total={ourWorks.length}
+            />
+            <Card
+              icon={<TeamOutlined style={{ color: 'green' }} />}
+              cade_title="Total Staff"
+              cade_total={usersTotal.length}
+            />
+
+            <Card
+              icon={<CaretUpOutlined style={{ color: 'green' }} />}
+              cade_title="Total Categories"
+              cade_total={category}
+            />
           </div>
-        </div> */}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -1,18 +1,36 @@
 /* service-area */
 
-.service-area {
+#service-area {
   background-color: #aabfd2;
   padding: 20px;
   position: relative;
   /* background-color: rgba(119, 119, 119, 0.15); */
 }
-
-.service-area a {
-  color: #000000 !important;
+#service-area .parent {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  height: 100%;
 }
 
-.showprices a {
+#service-area a {
   color: #000000 !important;
+}
+#service-area .parent .content p {
+  margin-bottom: 3rem !important;
+}
+#service-area .parent .child {
+  padding-right: 10px;
+  flex-grow: 1;
+  width: 33%;
+  position: relative;
+}
+#service-area .parent .child .content {
+  height: 100%;
+  background-color: #fff;
+  border: 0.5px solid #e0e0e0;
+  /* box-shadow: 0 0 0.1em gray; */
+  border-radius: 5px;
 }
 
 .service-area .anticon {

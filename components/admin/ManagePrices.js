@@ -10,9 +10,11 @@ import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
 import TextTruncate from 'react-text-truncate';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import Loader from '../layout/Loader';
 import { Context } from '../../context';
+import PageLoader from '../layout/PageLoader';
 
 const { confirm } = Modal;
 
@@ -25,19 +27,29 @@ const ManagePrices = () => {
   });
   const [success, setSuccess] = useState(false);
   const [ok, setOk] = useState(false);
+  const [okey, setOkey] = useState(false);
   const [prices, setPrices] = useState([]);
   const [uploadButtonText, setUploadButtonText] = useState('Upload Video');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [video, setVideo] = useState({});
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const router = useRouter();
 
   const {
     state: { user },
     dispatch,
   } = useContext(Context);
 
-  // console.log('previewVideo', video);
+  useEffect(() => {
+    if (!user) {
+      return router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -75,6 +87,7 @@ const ManagePrices = () => {
       setOk(false);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -159,6 +172,20 @@ const ManagePrices = () => {
     }
   };
 
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOk(false);
+      router.push('/');
+    }
+  };
+
   const setData = () => {
     const data = {
       columns: [
@@ -214,112 +241,121 @@ const ManagePrices = () => {
 
     return data;
   };
+
   return (
-    <Layout title="Manage Prices  Categories">
-      <AdminRoute>
-        <div className="container m-2">
-          <div className="row">
-            <div className="col-md-4">
-              <h1 className="lead">Manage Prices Categories</h1>
-            </div>
-            <div className="col-md-4 offset-md-2">
-              <p
-                className="btn text-white float-right btn-success"
-                onClick={showModal}
-              >
-                {' '}
-                Add New Price
-              </p>
-            </div>
-            <Modal
-              title="Add Prices"
-              visible={isModalVisible}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={null}
-            >
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    name="name"
-                    value={values.name}
-                    onChange={handleChange}
-                    className="form-control mb-4 p-2"
-                    placeholder="Enter name"
-                    required
-                  />
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title="Manage Prices  Categories">
+          <AdminRoute>
+            <div className="container m-2">
+              <div className="row">
+                <div className="col-md-4">
+                  <h1 className="lead">Manage Prices Categories</h1>
                 </div>
-
-                <div className="form-group">
-                  <label
-                    className="btn btn-dark btn-block text-left my-3 text-center"
-                    style={{ width: '100%' }}
+                <div className="col-md-4 offset-md-2">
+                  <p
+                    className="btn text-white float-right btn-success"
+                    onClick={showModal}
                   >
-                    {loading ? (
-                      <span className="spinLoader">
-                        <Spin />
-                      </span>
-                    ) : (
-                      `${uploadButtonText}`
-                    )}
+                    {' '}
+                    Add New Price
+                  </p>
+                </div>
+                <Modal
+                  title="Add Prices"
+                  visible={isModalVisible}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  footer={null}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="name"
+                        value={values.name}
+                        onChange={handleChange}
+                        className="form-control mb-4 p-2"
+                        placeholder="Enter name"
+                        required
+                      />
+                    </div>
 
-                    <input
-                      onChange={handleVideo}
-                      // value={values.video}
-                      type="file"
-                      accept="video/*"
-                      hidden
-                    />
-                  </label>
-                </div>
-                <div className="form-group">
-                  {progress > 0 && (
-                    <Progress
-                      className="d-flex justify-content-center pt-2"
-                      percent={progress}
-                      steps={10}
-                    />
-                  )}
-                </div>
+                    <div className="form-group">
+                      <label
+                        className="btn btn-dark btn-block text-left my-3 text-center"
+                        style={{ width: '100%' }}
+                      >
+                        {loading ? (
+                          <span className="spinLoader">
+                            <Spin />
+                          </span>
+                        ) : (
+                          `${uploadButtonText}`
+                        )}
 
-                <div className="form-group">
-                  <textarea
-                    rows="7"
-                    name="description"
-                    style={{ width: '100%', padding: '5px' }}
-                    value={values.description}
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
-                <div className="d-grid gap-2 my-2 ">
-                  <button
-                    className="btn btn-primary"
-                    disabled={!values.name || !values.description || loading}
-                    type="submit"
-                  >
-                    {values.loading ? <SyncOutlined spin /> : 'Submit'}
-                  </button>
-                </div>
-              </form>
-            </Modal>
-          </div>
-        </div>
-        <hr />
-        {ok ? (
-          <Loader />
-        ) : (
-          <MDBDataTable
-            data={setData()}
-            className="px-3"
-            bordered
-            striped
-            hover
-          />
-        )}
-        {/* <pre>{JSON.stringify(prices, null, 4)}</pre> */}
-      </AdminRoute>
-    </Layout>
+                        <input
+                          onChange={handleVideo}
+                          // value={values.video}
+                          type="file"
+                          accept="video/*"
+                          hidden
+                        />
+                      </label>
+                    </div>
+                    <div className="form-group">
+                      {progress > 0 && (
+                        <Progress
+                          className="d-flex justify-content-center pt-2"
+                          percent={progress}
+                          steps={10}
+                        />
+                      )}
+                    </div>
+
+                    <div className="form-group">
+                      <textarea
+                        rows="7"
+                        name="description"
+                        style={{ width: '100%', padding: '5px' }}
+                        value={values.description}
+                        onChange={handleChange}
+                      ></textarea>
+                    </div>
+                    <div className="d-grid gap-2 my-2 ">
+                      <button
+                        className="btn btn-primary"
+                        disabled={
+                          !values.name || !values.description || loading
+                        }
+                        type="submit"
+                      >
+                        {values.loading ? <SyncOutlined spin /> : 'Submit'}
+                      </button>
+                    </div>
+                  </form>
+                </Modal>
+              </div>
+            </div>
+            <hr />
+            {ok ? (
+              <Loader />
+            ) : (
+              <MDBDataTable
+                data={setData()}
+                className="px-3"
+                bordered
+                striped
+                hover
+              />
+            )}
+            {/* <pre>{JSON.stringify(prices, null, 4)}</pre> */}
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 

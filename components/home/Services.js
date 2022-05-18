@@ -34,7 +34,7 @@ const Services = () => {
 
   return (
     <Fragment>
-      <div className="container-fluid service-area">
+      <div className="container-fluid " id="service-area">
         <div className="row">
           <div className="col-md-12 text-center">
             <ShowcaseTitle title={'SERVICES'} />

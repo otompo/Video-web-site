@@ -16,10 +16,13 @@ import { toast } from 'react-toastify';
 import Resizer from 'react-image-file-resizer';
 import Loader from '../layout/Loader';
 import { Context } from '../../context';
+import PageLoader from '../layout/PageLoader';
+import { useRouter } from 'next/router';
 
 const { confirm } = Modal;
 
 const ManageCategories = () => {
+  const router = useRouter();
   const [values, setValues] = useState({
     title: '',
     description: '',
@@ -27,12 +30,14 @@ const ManageCategories = () => {
   });
   const [success, setSuccess] = useState(false);
   const [ok, setOk] = useState(false);
+  const [okey, setOkey] = useState(false);
   const [categories, setCategories] = useState([]);
   const [uploadButtonText, setUploadButtonText] = useState('Upload Image');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
   const [profileImage, setProfileImage] = useState({});
+
   const {
     state: { user },
     dispatch,
@@ -53,6 +58,10 @@ const ManageCategories = () => {
   useEffect(() => {
     showCategories();
   }, [success]);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -160,6 +169,20 @@ const ManageCategories = () => {
     }
   };
 
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOk(false);
+      router.push('/');
+    }
+  };
+
   const setData = () => {
     const data = {
       columns: [
@@ -230,79 +253,84 @@ const ManageCategories = () => {
 
     return data;
   };
-  return (
-    <Layout title="Manage Categories">
-      <AdminRoute>
-        <div className="container m-2">
-          <div className="row">
-            <div className="col-md-4">
-              <h1 className="lead">Manage Categories</h1>
-            </div>
-            <div className="col-md-4 offset-md-2">
-              <p
-                className="btn text-white float-right btn-success"
-                onClick={showModal}
-              >
-                {' '}
-                Add New Category
-              </p>
-            </div>
-            <Modal
-              title="Add Category"
-              visible={isModalVisible}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={null}
-            >
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    name="title"
-                    value={values.title}
-                    onChange={handleChange}
-                    className="form-control mb-4 p-2"
-                    placeholder="Enter title"
-                    required
-                  />
-                </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label
-                        className="btn btn-dark btn-block text-left my-3 text-center"
-                        style={{ width: '100%' }}
-                      >
-                        {loading ? (
-                          <span className="spinLoader">
-                            <Spin />
-                          </span>
-                        ) : (
-                          `${uploadButtonText}`
-                        )}
 
-                        <input
-                          type="file"
-                          name="profileImage"
-                          size="large"
-                          onChange={handleImage}
-                          accept="image/*"
-                          hidden
-                        />
-                      </label>
-                    </div>
-                  </div>
-                  <div className="col-md-4 offset-2">
-                    <div className="form-group">
-                      {imagePreview ? (
-                        <Avatar size={60} src={imagePreview} />
-                      ) : (
-                        <Avatar size={60} src="/preview.ico" />
-                      )}
-                    </div>
-                  </div>
+  return (
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title="Manage Categories">
+          <AdminRoute>
+            <div className="container m-2">
+              <div className="row">
+                <div className="col-md-4">
+                  <h1 className="lead">Manage Categories</h1>
                 </div>
-                {/* <div className="form-group">
+                <div className="col-md-4 offset-md-2">
+                  <p
+                    className="btn text-white float-right btn-success"
+                    onClick={showModal}
+                  >
+                    {' '}
+                    Add New Category
+                  </p>
+                </div>
+                <Modal
+                  title="Add Category"
+                  visible={isModalVisible}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  footer={null}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="title"
+                        value={values.title}
+                        onChange={handleChange}
+                        className="form-control mb-4 p-2"
+                        placeholder="Enter title"
+                        required
+                      />
+                    </div>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label
+                            className="btn btn-dark btn-block text-left my-3 text-center"
+                            style={{ width: '100%' }}
+                          >
+                            {loading ? (
+                              <span className="spinLoader">
+                                <Spin />
+                              </span>
+                            ) : (
+                              `${uploadButtonText}`
+                            )}
+
+                            <input
+                              type="file"
+                              name="profileImage"
+                              size="large"
+                              onChange={handleImage}
+                              accept="image/*"
+                              hidden
+                            />
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-md-4 offset-2">
+                        <div className="form-group">
+                          {imagePreview ? (
+                            <Avatar size={60} src={imagePreview} />
+                          ) : (
+                            <Avatar size={60} src="/preview.ico" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    {/* <div className="form-group">
                   <label className="btn btn-dark btn-block text-left my-3 text-center">
                     {loading ? (
                       <span className="spinLoader">
@@ -330,43 +358,47 @@ const ManageCategories = () => {
                   )}
                 </div> */}
 
-                <div className="form-group">
-                  <textarea
-                    rows="7"
-                    name="description"
-                    style={{ width: '100%' }}
-                    value={values.description}
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
-                <div className="d-grid gap-2 my-2 ">
-                  <button
-                    className="btn btn-primary"
-                    disabled={!values.title || !values.description || loading}
-                    type="submit"
-                  >
-                    {values.loading ? <SyncOutlined spin /> : 'Submit'}
-                  </button>
-                </div>
-              </form>
-            </Modal>
-          </div>
-        </div>
-        <hr />
-        {ok ? (
-          <Loader />
-        ) : (
-          <MDBDataTable
-            data={setData()}
-            className="px-3"
-            bordered
-            striped
-            hover
-          />
-        )}
-        {/* <pre>{JSON.stringify(categories, null, 4)}</pre> */}
-      </AdminRoute>
-    </Layout>
+                    <div className="form-group">
+                      <textarea
+                        rows="7"
+                        name="description"
+                        style={{ width: '100%' }}
+                        value={values.description}
+                        onChange={handleChange}
+                      ></textarea>
+                    </div>
+                    <div className="d-grid gap-2 my-2 ">
+                      <button
+                        className="btn btn-primary"
+                        disabled={
+                          !values.title || !values.description || loading
+                        }
+                        type="submit"
+                      >
+                        {values.loading ? <SyncOutlined spin /> : 'Submit'}
+                      </button>
+                    </div>
+                  </form>
+                </Modal>
+              </div>
+            </div>
+            <hr />
+            {ok ? (
+              <Loader />
+            ) : (
+              <MDBDataTable
+                data={setData()}
+                className="px-3"
+                bordered
+                striped
+                hover
+              />
+            )}
+            {/* <pre>{JSON.stringify(categories, null, 4)}</pre> */}
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 
