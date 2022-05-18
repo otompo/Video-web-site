@@ -29,7 +29,6 @@ export const login = catchAsync(async (req, res, next) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      last_login_date: user.last_login_date,
       profileImage: user.profileImage,
       picture: user.picture,
       facebook: user.facebook,

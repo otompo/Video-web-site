@@ -55,12 +55,6 @@ const UserIndex = () => {
                           {user && user.name}
                         </span>
                       </h4>{' '}
-                      <h4 className="d-inline">
-                        Last Login{' '}
-                        <span className="text-primary lead">
-                          {user && moment(user.last_login_date).format('ll')}
-                        </span>
-                      </h4>
                     </div>
                   </di>
                 </div>
