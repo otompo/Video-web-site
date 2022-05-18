@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import Loader from '../layout/Loader';
 import Link from 'next/link';
 import { Context } from '../../context';
+import PageLoader from '../layout/PageLoader';
 
 const ManageUsers = () => {
   const { confirm } = Modal;
@@ -27,6 +28,7 @@ const ManageUsers = () => {
   });
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [okey, setOkey] = useState(false);
   const [success, setSuccess] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const {
@@ -49,6 +51,30 @@ const ManageUsers = () => {
     setIsModalVisible(false);
   };
 
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOkey(false);
+      router.push('/');
+    }
+  };
+
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -62,7 +88,7 @@ const ManageUsers = () => {
       setUsers(data);
       setLoading(false);
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err.response);
       setLoading(false);
     }
   };
@@ -296,79 +322,85 @@ const ManageUsers = () => {
     return data;
   };
   return (
-    <Layout title="Manage Staff">
-      <AdminRoute>
-        <div className="container m-2">
-          <div className="row">
-            <div className="col-md-4">
-              <h1 className="lead">Manage Staff</h1>
-            </div>
-            <div className="col-md-4 offset-md-2">
-              <p
-                className="btn text-white float-right btn-success"
-                onClick={showModal}
-              >
-                {' '}
-                Add Staff
-              </p>
-            </div>
-            <Modal
-              title="Add Staff"
-              visible={isModalVisible}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={null}
-            >
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    name="name"
-                    value={values.name}
-                    onChange={handleChange}
-                    className="form-control mb-4 p-2"
-                    placeholder="Enter name"
-                    required
-                  />
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title="Manage Staff">
+          <AdminRoute>
+            <div className="container m-2">
+              <div className="row">
+                <div className="col-md-4">
+                  <h1 className="lead">Manage Staff</h1>
                 </div>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    name="email"
-                    value={values.email}
-                    onChange={handleChange}
-                    className="form-control mb-4 p-2"
-                    placeholder="Enter email"
-                    required
-                  />
-                </div>
-                <div className="d-grid gap-2 my-2 ">
-                  <button
-                    className="btn btn-primary"
-                    disabled={!values.name || !values.email}
-                    type="submit"
+                <div className="col-md-4 offset-md-2">
+                  <p
+                    className="btn text-white float-right btn-success"
+                    onClick={showModal}
                   >
-                    {values.loading ? <SyncOutlined spin /> : 'Submit'}
-                  </button>
+                    {' '}
+                    Add Staff
+                  </p>
                 </div>
-              </form>
-            </Modal>
-          </div>
-        </div>
-        <hr />
-        {loading ? (
-          <Loader />
-        ) : (
-          <MDBDataTable
-            data={setData()}
-            className="px-3"
-            bordered
-            striped
-            hover
-          />
-        )}
-      </AdminRoute>
-    </Layout>
+                <Modal
+                  title="Add Staff"
+                  visible={isModalVisible}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  footer={null}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="name"
+                        value={values.name}
+                        onChange={handleChange}
+                        className="form-control mb-4 p-2"
+                        placeholder="Enter name"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        className="form-control mb-4 p-2"
+                        placeholder="Enter email"
+                        required
+                      />
+                    </div>
+                    <div className="d-grid gap-2 my-2 ">
+                      <button
+                        className="btn btn-primary"
+                        disabled={!values.name || !values.email}
+                        type="submit"
+                      >
+                        {values.loading ? <SyncOutlined spin /> : 'Submit'}
+                      </button>
+                    </div>
+                  </form>
+                </Modal>
+              </div>
+            </div>
+            <hr />
+            {loading ? (
+              <Loader />
+            ) : (
+              <MDBDataTable
+                data={setData()}
+                className="px-3"
+                bordered
+                striped
+                hover
+              />
+            )}
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 

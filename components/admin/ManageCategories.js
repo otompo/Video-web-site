@@ -119,10 +119,10 @@ const ManageCategories = () => {
       try {
         let { data } = await axios.post(
           `/api/user/profileimage`,
-          { headers: { authorization: `Bearer ${user.token}` } },
           {
             profileImage: uri,
           },
+          { headers: { authorization: `Bearer ${user.token}` } },
         );
         // set image in the state
         setProfileImage(data);
@@ -178,7 +178,7 @@ const ManageCategories = () => {
       if (data.ok) setOkey(true);
     } catch (err) {
       console.log(err);
-      setOk(false);
+      setOkey(false);
       router.push('/');
     }
   };

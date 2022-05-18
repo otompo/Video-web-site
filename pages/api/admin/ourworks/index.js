@@ -10,7 +10,7 @@ const handler = nc({ onError });
 
 dbConnect();
 
-handler.use(isAuth, isAdmin).post(createOurWorks);
 handler.use(isAuth, isAdmin).get(getAllWorks);
+handler.use(isAuth, isAdmin).post(createOurWorks);
 
 export default handler;

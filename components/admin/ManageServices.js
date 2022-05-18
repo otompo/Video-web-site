@@ -10,17 +10,19 @@ import {
 } from '@ant-design/icons';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
-import moment from 'moment';
 import TextTruncate from 'react-text-truncate';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Resizer from 'react-image-file-resizer';
 import Loader from '../layout/Loader';
 import { Context } from '../../context';
+import { useRouter } from 'next/router';
+import PageLoader from '../layout/PageLoader';
 
 const { confirm } = Modal;
 
 const ManageServices = () => {
+  const router = useRouter();
   const [values, setValues] = useState({
     title: '',
     description: '',
@@ -28,6 +30,7 @@ const ManageServices = () => {
   });
   const [success, setSuccess] = useState(false);
   const [ok, setOk] = useState(false);
+  const [okey, setOkey] = useState(false);
   const [services, setServices] = useState([]);
   const [uploadButtonText, setUploadButtonText] = useState('Upload Image');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -50,6 +53,16 @@ const ManageServices = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
   useEffect(() => {
     showServices();
@@ -111,10 +124,10 @@ const ManageServices = () => {
       try {
         let { data } = await axios.post(
           `/api/user/profileimage`,
-          { headers: { authorization: `Bearer ${user.token}` } },
           {
             profileImage: uri,
           },
+          { headers: { authorization: `Bearer ${user.token}` } },
         );
         // set image in the state
         setProfileImage(data);
@@ -159,6 +172,20 @@ const ManageServices = () => {
     } catch (err) {
       toast.error(err);
       setValues({ ...values, loading: false });
+    }
+  };
+
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOkey(false);
+      router.push('/');
     }
   };
 
@@ -233,116 +260,124 @@ const ManageServices = () => {
     return data;
   };
   return (
-    <Layout title="Manage Service">
-      <AdminRoute>
-        <div className="container m-2">
-          <div className="row">
-            <div className="col-md-4">
-              <h1 className="lead">Manage Service</h1>
-            </div>
-            <div className="col-md-4 offset-md-2">
-              <p
-                className="btn text-white float-right btn-success"
-                onClick={showModal}
-              >
-                {' '}
-                Add New Service
-              </p>
-            </div>
-            <Modal
-              title="Add Service"
-              visible={isModalVisible}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={null}
-            >
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    name="title"
-                    value={values.title}
-                    onChange={handleChange}
-                    className="form-control mb-4 p-2"
-                    placeholder="Enter title"
-                    required
-                  />
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title="Manage Service">
+          <AdminRoute>
+            <div className="container m-2">
+              <div className="row">
+                <div className="col-md-4">
+                  <h1 className="lead">Manage Service</h1>
                 </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label
-                        className="btn btn-dark btn-block text-left my-3 text-center"
-                        style={{ width: '100%' }}
-                      >
-                        {loading ? (
-                          <span className="spinLoader">
-                            <Spin />
-                          </span>
-                        ) : (
-                          `${uploadButtonText}`
-                        )}
-
-                        <input
-                          type="file"
-                          name="profileImage"
-                          size="large"
-                          onChange={handleImage}
-                          accept="image/*"
-                          hidden
-                        />
-                      </label>
-                    </div>
-                  </div>
-                  <div className="col-md-4 offset-2">
-                    <div className="form-group">
-                      {imagePreview ? (
-                        <Avatar size={60} src={imagePreview} />
-                      ) : (
-                        <Avatar size={60} src="/preview.ico" />
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <textarea
-                    rows="7"
-                    name="description"
-                    style={{ width: '100%' }}
-                    value={values.description}
-                    onChange={handleChange}
-                    className="p-2"
-                  ></textarea>
-                </div>
-                <div className="d-grid gap-2 my-2 ">
-                  <button
-                    className="btn btn-primary"
-                    disabled={!values.title || !values.description || loading}
-                    type="submit"
+                <div className="col-md-4 offset-md-2">
+                  <p
+                    className="btn text-white float-right btn-success"
+                    onClick={showModal}
                   >
-                    {values.loading ? <SyncOutlined spin /> : 'Submit'}
-                  </button>
+                    {' '}
+                    Add New Service
+                  </p>
                 </div>
-              </form>
-            </Modal>
-          </div>
-        </div>
-        <hr />
-        {ok ? (
-          <Loader />
-        ) : (
-          <MDBDataTable
-            data={setData()}
-            className="px-3"
-            bordered
-            striped
-            hover
-          />
-        )}
-        {/* <pre>{JSON.stringify(services, null, 4)}</pre> */}
-      </AdminRoute>
-    </Layout>
+                <Modal
+                  title="Add Service"
+                  visible={isModalVisible}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  footer={null}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="title"
+                        value={values.title}
+                        onChange={handleChange}
+                        className="form-control mb-4 p-2"
+                        placeholder="Enter title"
+                        required
+                      />
+                    </div>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label
+                            className="btn btn-dark btn-block text-left my-3 text-center"
+                            style={{ width: '100%' }}
+                          >
+                            {loading ? (
+                              <span className="spinLoader">
+                                <Spin />
+                              </span>
+                            ) : (
+                              `${uploadButtonText}`
+                            )}
+
+                            <input
+                              type="file"
+                              name="profileImage"
+                              size="large"
+                              onChange={handleImage}
+                              accept="image/*"
+                              hidden
+                            />
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-md-4 offset-2">
+                        <div className="form-group">
+                          {imagePreview ? (
+                            <Avatar size={60} src={imagePreview} />
+                          ) : (
+                            <Avatar size={60} src="/preview.ico" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <textarea
+                        rows="7"
+                        name="description"
+                        style={{ width: '100%' }}
+                        value={values.description}
+                        onChange={handleChange}
+                        className="p-2"
+                      ></textarea>
+                    </div>
+                    <div className="d-grid gap-2 my-2 ">
+                      <button
+                        className="btn btn-primary"
+                        disabled={
+                          !values.title || !values.description || loading
+                        }
+                        type="submit"
+                      >
+                        {values.loading ? <SyncOutlined spin /> : 'Submit'}
+                      </button>
+                    </div>
+                  </form>
+                </Modal>
+              </div>
+            </div>
+            <hr />
+            {ok ? (
+              <Loader />
+            ) : (
+              <MDBDataTable
+                data={setData()}
+                className="px-3"
+                bordered
+                striped
+                hover
+              />
+            )}
+            {/* <pre>{JSON.stringify(services, null, 4)}</pre> */}
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 

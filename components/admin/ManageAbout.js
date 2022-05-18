@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { MDBDataTable } from 'mdbreact';
-import { Progress, Spin, Modal, Upload } from 'antd';
+import { Progress, Spin, Modal } from 'antd';
 import {
   ExclamationCircleOutlined,
   SyncOutlined,
@@ -14,16 +14,20 @@ import { toast } from 'react-toastify';
 import Loader from '../layout/Loader';
 import Link from 'next/link';
 import { Context } from '../../context';
+import { useRouter } from 'next/router';
+import PageLoader from '../layout/PageLoader';
 
 const { confirm } = Modal;
 
 const ManageAbout = () => {
+  const router = useRouter();
   const [values, setValues] = useState({
     description: '',
     loading: false,
   });
   const [success, setSuccess] = useState(false);
   const [ok, setOk] = useState(false);
+  const [okey, setOkey] = useState(false);
   const [abouts, setAbouts] = useState([]);
   const [uploadButtonText, setUploadButtonText] = useState('Upload Video');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -35,6 +39,19 @@ const ManageAbout = () => {
     dispatch,
   } = useContext(Context);
 
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
+  useEffect(() => {
+    showAbout();
+  }, [success]);
   // console.log('previewVideo', video);
 
   const showModal = () => {
@@ -48,10 +65,6 @@ const ManageAbout = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
-  useEffect(() => {
-    showAbout();
-  }, [success]);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -156,6 +169,20 @@ const ManageAbout = () => {
     }
   };
 
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOkey(false);
+      router.push('/');
+    }
+  };
+
   const setData = () => {
     const data = {
       columns: [
@@ -210,100 +237,107 @@ const ManageAbout = () => {
 
     return data;
   };
+
   return (
-    <Layout title="Manage About">
-      <AdminRoute>
-        <div className="container m-2">
-          <div className="row">
-            <div className="col-md-4">
-              <h1 className="lead">Manage About</h1>
-            </div>
-            <div className="col-md-4 offset-md-2">
-              {/* <p
-                className="btn text-white float-right btn-success"
-                onClick={showModal}
-              >
-                {' '}
-                Add New About
-              </p> */}
-            </div>
-            <Modal
-              title="Add About"
-              visible={isModalVisible}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={null}
-            >
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label
-                    className="btn btn-dark btn-block text-left my-3 text-center"
-                    style={{ width: '100%' }}
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title="Manage About">
+          <AdminRoute>
+            <div className="container m-2">
+              <div className="row">
+                <div className="col-md-4">
+                  <h1 className="lead">Manage About</h1>
+                </div>
+                <div className="col-md-4 offset-md-2">
+                  <p
+                    className="btn text-white float-right btn-success"
+                    onClick={showModal}
                   >
-                    {loading ? (
-                      <span className="spinLoader">
-                        <Spin />
-                      </span>
-                    ) : (
-                      `${uploadButtonText}`
-                    )}
+                    {' '}
+                    Add New About
+                  </p>
+                </div>
+                <Modal
+                  title="Add About"
+                  visible={isModalVisible}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  footer={null}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <label
+                        className="btn btn-dark btn-block text-left my-3 text-center"
+                        style={{ width: '100%' }}
+                      >
+                        {loading ? (
+                          <span className="spinLoader">
+                            <Spin />
+                          </span>
+                        ) : (
+                          `${uploadButtonText}`
+                        )}
 
-                    <input
-                      onChange={handleVideo}
-                      // value={values.video}
-                      type="file"
-                      accept="video/*"
-                      hidden
-                    />
-                  </label>
-                </div>
-                <div className="form-group">
-                  {progress > 0 && (
-                    <Progress
-                      className="d-flex justify-content-center pt-2"
-                      percent={progress}
-                      steps={10}
-                    />
-                  )}
-                </div>
+                        <input
+                          onChange={handleVideo}
+                          // value={values.video}
+                          type="file"
+                          accept="video/*"
+                          hidden
+                        />
+                      </label>
+                    </div>
+                    <div className="form-group">
+                      {progress > 0 && (
+                        <Progress
+                          className="d-flex justify-content-center pt-2"
+                          percent={progress}
+                          steps={10}
+                        />
+                      )}
+                    </div>
 
-                <div className="form-group">
-                  <textarea
-                    rows="7"
-                    name="description"
-                    style={{ width: '100%', padding: '5px' }}
-                    value={values.description}
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
-                <div className="d-grid gap-2 my-2 ">
-                  <button
-                    className="btn btn-primary"
-                    disabled={!values.description || loading}
-                    type="submit"
-                  >
-                    {values.loading ? <SyncOutlined spin /> : 'Submit'}
-                  </button>
-                </div>
-              </form>
-            </Modal>
-          </div>
-        </div>
-        <hr />
-        {ok ? (
-          <Loader />
-        ) : (
-          <MDBDataTable
-            data={setData()}
-            className="px-3"
-            bordered
-            striped
-            hover
-          />
-        )}
-        {/* <pre>{JSON.stringify(prices, null, 4)}</pre> */}
-      </AdminRoute>
-    </Layout>
+                    <div className="form-group">
+                      <textarea
+                        rows="7"
+                        name="description"
+                        style={{ width: '100%', padding: '5px' }}
+                        value={values.description}
+                        onChange={handleChange}
+                      ></textarea>
+                    </div>
+                    <div className="d-grid gap-2 my-2 ">
+                      <button
+                        className="btn btn-primary"
+                        disabled={!values.description || loading}
+                        type="submit"
+                      >
+                        {values.loading ? <SyncOutlined spin /> : 'Submit'}
+                      </button>
+                    </div>
+                  </form>
+                </Modal>
+              </div>
+            </div>
+            <hr />
+            {ok ? (
+              <Loader />
+            ) : (
+              <MDBDataTable
+                data={setData()}
+                className="px-3"
+                bordered
+                striped
+                hover
+              />
+            )}
+            {/* <pre>{JSON.stringify(prices, null, 4)}</pre> */}
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 

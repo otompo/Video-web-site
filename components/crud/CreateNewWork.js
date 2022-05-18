@@ -2,16 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Resizer from 'react-image-file-resizer';
-import { Badge } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
-import { useRouter } from 'next/router';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
 
 const CreateNewWork = () => {
   // router
-  const router = useRouter();
-
   const [values, setValues] = useState({
     name: '',
     url: '',
@@ -76,79 +72,81 @@ const CreateNewWork = () => {
   };
 
   return (
-    <Layout title="Create New Work">
-      <AdminRoute>
-        <h1 className="lead">Create New Work</h1>
-        <hr />
-        <div className="row">
-          <div className="col-md-8">
-            <div className="card">
-              <div className="card-body">
-                <form onSubmit={handleSubmit}>
-                  <div className="form-group py-2">
-                    <input
-                      className="form-control"
-                      name="name"
-                      type="text"
-                      placeholder="Enter company name"
-                      onChange={handleChange}
-                      value={values.name}
-                      required
-                    />
-                  </div>
-
-                  <div className="col">
-                    <div className="form-group">
-                      <label
-                        style={{ width: '100%' }}
-                        className="btn btn-outline-secondary btn-block  text-left mt-3 "
-                      >
-                        {/* {values.loading ? 'uploading' : 'Image Upload'} */}
-                        {values.loading ? 'saving image' : uploadButtonText}
-                        <input
-                          type="file"
-                          name="image"
-                          size="large"
-                          onChange={handleImage}
-                          accept="image/*"
-                          hidden
-                        />
-                      </label>
+    <>
+      <Layout title="Create New Work">
+        <AdminRoute>
+          <h1 className="lead">Create New Work</h1>
+          <hr />
+          <div className="row">
+            <div className="col-md-8">
+              <div className="card">
+                <div className="card-body">
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group py-2">
+                      <input
+                        className="form-control"
+                        name="name"
+                        type="text"
+                        placeholder="Enter company name"
+                        onChange={handleChange}
+                        value={values.name}
+                        required
+                      />
                     </div>
-                  </div>
 
-                  <div className="d-grid gap-2 my-2">
-                    <button
-                      disabled={values.loading || values.uploading}
-                      loading={values.loading}
-                      className="btn btn-primary my-2"
-                      type="submit"
-                    >
-                      {/* {loading ? <SyncOutlined spin /> : 'Submit'} */}
-                      {values.loading ? (
-                        <SyncOutlined spin />
-                      ) : (
-                        'Save & Continue'
-                      )}
-                    </button>
-                  </div>
-                </form>
+                    <div className="col">
+                      <div className="form-group">
+                        <label
+                          style={{ width: '100%' }}
+                          className="btn btn-outline-secondary btn-block  text-left mt-3 "
+                        >
+                          {/* {values.loading ? 'uploading' : 'Image Upload'} */}
+                          {values.loading ? 'saving image' : uploadButtonText}
+                          <input
+                            type="file"
+                            name="image"
+                            size="large"
+                            onChange={handleImage}
+                            accept="image/*"
+                            hidden
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="d-grid gap-2 my-2">
+                      <button
+                        disabled={values.loading || values.uploading}
+                        loading={values.loading}
+                        className="btn btn-primary my-2"
+                        type="submit"
+                      >
+                        {/* {loading ? <SyncOutlined spin /> : 'Submit'} */}
+                        {values.loading ? (
+                          <SyncOutlined spin />
+                        ) : (
+                          'Save & Continue'
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Categories</h5>
+            <div className="col-md-4">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">Categories</h5>
+                </div>
               </div>
-            </div>
 
-            {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
-            {/* <pre>{JSON.stringify(description, null, 4)}</pre> */}
+              {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
+              {/* <pre>{JSON.stringify(description, null, 4)}</pre> */}
+            </div>
           </div>
-        </div>
-      </AdminRoute>
-    </Layout>
+        </AdminRoute>
+      </Layout>
+    </>
   );
 };
 

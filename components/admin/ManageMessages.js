@@ -11,13 +11,14 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
 import { Context } from '../../context';
+import PageLoader from '../layout/PageLoader';
 
 const ManageMessages = () => {
   const { confirm } = Modal;
-
+  const router = useRouter();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [okey, setOkey] = useState(false);
   const { id } = router.query;
   const {
     state: { user },
@@ -26,6 +27,16 @@ const ManageMessages = () => {
 
   useEffect(() => {
     loadMessages();
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
   }, []);
 
   const loadMessages = async () => {
@@ -76,6 +87,20 @@ const ManageMessages = () => {
         return;
       },
     });
+  };
+
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOkey(false);
+      router.push('/');
+    }
   };
 
   const setData = () => {
@@ -155,23 +180,29 @@ const ManageMessages = () => {
   };
 
   return (
-    <Layout title="Manage Messages">
-      <AdminRoute>
-        <h1 className="lead">Manage Messages</h1>
-        <hr />
-        {loading ? (
-          <Loader />
-        ) : (
-          <MDBDataTable
-            data={setData()}
-            className="px-3"
-            bordered
-            striped
-            hover
-          />
-        )}
-      </AdminRoute>
-    </Layout>
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title="Manage Messages">
+          <AdminRoute>
+            <h1 className="lead">Manage Messages</h1>
+            <hr />
+            {loading ? (
+              <Loader />
+            ) : (
+              <MDBDataTable
+                data={setData()}
+                className="px-3"
+                bordered
+                striped
+                hover
+              />
+            )}
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 

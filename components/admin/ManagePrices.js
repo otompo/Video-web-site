@@ -181,7 +181,7 @@ const ManagePrices = () => {
       if (data.ok) setOkey(true);
     } catch (err) {
       console.log(err);
-      setOk(false);
+      setOkey(false);
       router.push('/');
     }
   };

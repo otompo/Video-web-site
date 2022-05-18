@@ -10,7 +10,7 @@ const handler = nc({ onError });
 
 dbConnect();
 
-handler.use(isAuth, isAdmin).post(createFeatureprice);
 handler.use(isAuth, isAdmin).get(getAllFeature);
+handler.use(isAuth, isAdmin).post(createFeatureprice);
 
 export default handler;

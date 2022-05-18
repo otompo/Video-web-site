@@ -11,12 +11,16 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import AdminRoute from '../routes/AdminRoutes';
+import { useRouter } from 'next/router';
 import Layout from '../layout/Layout';
 import { toast } from 'react-toastify';
 import { Context } from '../../context';
+import PageLoader from '../layout/PageLoader';
+
 const { confirm } = Modal;
 
 const ManagePriceDetail = () => {
+  const router = useRouter();
   const [values, setValues] = useState({
     title: '',
     price: '',
@@ -28,6 +32,7 @@ const ManagePriceDetail = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [ok, setOk] = useState(false);
+  const [okey, setOkey] = useState(false);
   const [video, setVideo] = useState({});
   const [progress, setProgress] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -42,6 +47,16 @@ const ManagePriceDetail = () => {
   const showModal = () => {
     setIsModalVisible(true);
   };
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
   const handleOk = () => {
     setIsModalVisible(false);
@@ -66,13 +81,29 @@ const ManagePriceDetail = () => {
     list[index][name] = value;
     setInputList(list);
   };
+
   const handleAddInput = (e) => {
     setInputList([...inputList, { name: '' }]);
   };
+
   const handleRemoveInput = (index) => {
     const list = [...inputList];
     list.splice(index, 1);
     setInputList(list);
+  };
+
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOkey(false);
+      router.push('/');
+    }
   };
 
   const showPrices = async () => {
@@ -159,8 +190,8 @@ const ManagePriceDetail = () => {
       setFeaturprices(data);
       setValues({ ...values, loading: false });
     } catch (err) {
-      console.log(err);
-      toast.error(err.response.data.message);
+      console.log(err.response);
+
       setValues({ ...values, loading: false });
     }
   };
@@ -307,104 +338,108 @@ const ManagePriceDetail = () => {
   };
 
   return (
-    <Layout title="Manage Feature Price">
-      <AdminRoute>
-        <div className="container ourWorks">
-          <div className="row m-4">
-            <div className="col-md-6">
-              <h1 className="lead">Manage Feature Price</h1>
-            </div>
-            <div className="col-md-6">
-              <p
-                className="btn text-white float-right btn-success m-2"
-                onClick={showModal}
-              >
-                {' '}
-                Add New Feature Price
-              </p>
-              {/* <Link href="/admin/works/create">
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title="Manage Feature Price">
+          <AdminRoute>
+            <div className="container ourWorks">
+              <div className="row m-4">
+                <div className="col-md-6">
+                  <h1 className="lead">Manage Feature Price</h1>
+                </div>
+                <div className="col-md-6">
+                  <p
+                    className="btn text-white float-right btn-success m-2"
+                    onClick={showModal}
+                  >
+                    {' '}
+                    Add New Feature Price
+                  </p>
+                  {/* <Link href="/admin/works/create">
                 <a className="btn text-white float-right new-room btn-success m-2">
                   {' '}
                   Add New Work
                 </a>
               </Link> */}
-            </div>
-            <Modal
-              title="Add Price Details"
-              visible={isModalVisible}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={null}
-            >
-              <div className="row">
-                <div className="col-md-6">
-                  <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                      <input
-                        type="text"
-                        name="title"
-                        value={values.title}
-                        onChange={handleChange}
-                        className="form-control mb-4 p-2"
-                        placeholder="Enter title"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        type="text"
-                        name="price"
-                        value={values.price}
-                        onChange={handleChange}
-                        className="form-control mb-4 p-2"
-                        placeholder="Enter price"
-                        required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      {inputList.map((item, i) => (
-                        <div className="row" key={i}>
-                          <div className="col-md-8">
-                            <div className="form-group">
-                              <input
-                                type="text"
-                                id="price_field"
-                                className="form-control"
-                                name="name"
-                                value={item.ingredient}
-                                onChange={(e) => handleInputChange(e, i)}
-                                placeholder="Enter feature"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-md-4">
-                            {inputList.length !== 1 && (
-                              <input
-                                type="button"
-                                className="btn btn-danger"
-                                value="Remove"
-                                onClick={handleRemoveInput}
-                              />
-                            )}
-                          </div>
-                          <div className="col-md-4">
-                            {inputList.length - 1 === i && (
-                              <input
-                                type="button"
-                                className="btn btn-primary large"
-                                value="Add"
-                                onClick={handleAddInput}
-                                style={{ marginLeft: '-5px' }}
-                              />
-                            )}
-                          </div>
+                </div>
+                <Modal
+                  title="Add Price Details"
+                  visible={isModalVisible}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  footer={null}
+                >
+                  <div className="row">
+                    <div className="col-md-6">
+                      <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                          <input
+                            type="text"
+                            name="title"
+                            value={values.title}
+                            onChange={handleChange}
+                            className="form-control mb-4 p-2"
+                            placeholder="Enter title"
+                            required
+                          />
                         </div>
-                      ))}
-                    </div>
+                        <div className="form-group">
+                          <input
+                            type="text"
+                            name="price"
+                            value={values.price}
+                            onChange={handleChange}
+                            className="form-control mb-4 p-2"
+                            placeholder="Enter price"
+                            required
+                          />
+                        </div>
 
-                    {/* <div className="form-group">
+                        <div className="form-group">
+                          {inputList.map((item, i) => (
+                            <div className="row" key={i}>
+                              <div className="col-md-8">
+                                <div className="form-group">
+                                  <input
+                                    type="text"
+                                    id="price_field"
+                                    className="form-control"
+                                    name="name"
+                                    value={item.ingredient}
+                                    onChange={(e) => handleInputChange(e, i)}
+                                    placeholder="Enter feature"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-md-4">
+                                {inputList.length !== 1 && (
+                                  <input
+                                    type="button"
+                                    className="btn btn-danger"
+                                    value="Remove"
+                                    onClick={handleRemoveInput}
+                                  />
+                                )}
+                              </div>
+                              <div className="col-md-4">
+                                {inputList.length - 1 === i && (
+                                  <input
+                                    type="button"
+                                    className="btn btn-primary large"
+                                    value="Add"
+                                    onClick={handleAddInput}
+                                    style={{ marginLeft: '-5px' }}
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* <div className="form-group">
                       <label className="btn btn-dark btn-block text-left mt-3 text-center">
                         {loading ? (
                           <span className="spinLoader">
@@ -423,7 +458,7 @@ const ManagePriceDetail = () => {
                         />
                       </label>
                     </div> */}
-                    {/* <div className="form-group">
+                        {/* <div className="form-group">
                       {progress > 0 && (
                         <Progress
                           className="d-flex justify-content-center pt-2"
@@ -432,37 +467,39 @@ const ManagePriceDetail = () => {
                         />
                       )}
                     </div> */}
-                    <div className="d-grid gap-2 my-2 ">
-                      <button
-                        className="btn btn-primary"
-                        disabled={!values.title || !values.price || loading}
-                        type="submit"
-                      >
-                        {values.loading ? <SyncOutlined spin /> : 'Submit'}
-                      </button>
+                        <div className="d-grid gap-2 my-2 ">
+                          <button
+                            className="btn btn-primary"
+                            disabled={!values.title || !values.price || loading}
+                            type="submit"
+                          >
+                            {values.loading ? <SyncOutlined spin /> : 'Submit'}
+                          </button>
+                        </div>
+                      </form>
                     </div>
-                  </form>
-                </div>
-                <div className="col-md-6">
-                  <h1 className="lead  ml-5">Categories</h1>
-                  <hr />
-                  {showPriceCategories()}
-                </div>
+                    <div className="col-md-6">
+                      <h1 className="lead  ml-5">Categories</h1>
+                      <hr />
+                      {showPriceCategories()}
+                    </div>
+                  </div>
+                </Modal>
               </div>
-            </Modal>
-          </div>
-        </div>
-        <hr />
-        {/* <pre>{JSON.stringify(categories, null, 4)}</pre> */}
-        <MDBDataTable
-          data={setData()}
-          className="px-3"
-          bordered
-          striped
-          hover
-        />
-      </AdminRoute>
-    </Layout>
+            </div>
+            <hr />
+            {/* <pre>{JSON.stringify(categories, null, 4)}</pre> */}
+            <MDBDataTable
+              data={setData()}
+              className="px-3"
+              bordered
+              striped
+              hover
+            />
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 

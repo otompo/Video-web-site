@@ -15,7 +15,6 @@ const S3 = new AWS.S3(awsConfig);
 
 // create Service
 export const createService = catchAsync(async (req, res, next) => {
-  //   console.log(req.body);
   const { title, description, profileImage } = req.body;
 
   let slug = slugify(title).toLowerCase();
@@ -76,7 +75,7 @@ export const deleteService = catchAsync(async (req, res, next) => {
   S3.deleteObject(params, (err, data) => {
     if (err) {
       console.log(err);
-      res.sendStatus(400);
+      res.send(400);
     }
   });
 

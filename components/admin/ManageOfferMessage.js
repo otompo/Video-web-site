@@ -11,12 +11,14 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
 import { Context } from '../../context';
+import PageLoader from '../layout/PageLoader';
 
 const ManageOfferMessages = () => {
   const { confirm } = Modal;
 
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [okey, setOkey] = useState(false);
   const router = useRouter();
   const { id } = router.query;
 
@@ -28,6 +30,30 @@ const ManageOfferMessages = () => {
   useEffect(() => {
     loadMessages();
   }, []);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOkey(false);
+      router.push('/');
+    }
+  };
 
   const loadMessages = async () => {
     try {
@@ -173,23 +199,29 @@ const ManageOfferMessages = () => {
   };
 
   return (
-    <Layout title="Manage Price Offer Messages">
-      <AdminRoute>
-        <h1 className="lead">Manage Price Offer Messages</h1>
-        <hr />
-        {loading ? (
-          <Loader />
-        ) : (
-          <MDBDataTable
-            data={setData()}
-            className="px-3"
-            bordered
-            striped
-            hover
-          />
-        )}
-      </AdminRoute>
-    </Layout>
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title="Manage Price Offer Messages">
+          <AdminRoute>
+            <h1 className="lead">Manage Price Offer Messages</h1>
+            <hr />
+            {loading ? (
+              <Loader />
+            ) : (
+              <MDBDataTable
+                data={setData()}
+                className="px-3"
+                bordered
+                striped
+                hover
+              />
+            )}
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 

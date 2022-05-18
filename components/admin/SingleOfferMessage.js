@@ -14,6 +14,7 @@ import moment from 'moment';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
 import { Context } from '../../context';
+import PageLoader from '../layout/PageLoader';
 
 const SingleOfferMessage = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const SingleOfferMessage = () => {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState({});
   const [success, setSuccess] = useState(false);
+  const [okey, setOkey] = useState(false);
   const [replyedMessage, setReplyedMessage] = useState({});
   const {
     state: { user },
@@ -34,11 +36,35 @@ const SingleOfferMessage = () => {
   });
 
   useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
     loadMessage();
   }, [id, success]);
 
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOkey(false);
+      router.push('/');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -183,109 +209,115 @@ const SingleOfferMessage = () => {
   };
 
   return (
-    <Layout title={message && message.message}>
-      <AdminRoute>
-        <div>
-          {TopInfo()}
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title={message && message.message}>
+          <AdminRoute>
+            <div>
+              {TopInfo()}
 
-          <div className="row">
-            <div className="col-md-10 offset-md-1">
-              <div className="card">
-                <div className="card-body">
-                  <div className="row">
-                    <div className="col-md-3">
-                      {' '}
-                      SENDER:{' '}
-                      <h1 className="lead">
-                        {message.firstName} {message.surName}
-                      </h1>
-                    </div>
-                    <div className="col-md-3">
-                      EMAIL:{' '}
-                      <h1 className="lead">
-                        <a
-                          href="mailto:`${message.email}`"
-                          style={{ color: '#000' }}
-                        >
+              <div className="row">
+                <div className="col-md-10 offset-md-1">
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-md-3">
                           {' '}
-                          {message.email}
-                        </a>
-                      </h1>
-                    </div>
-                    <div className="col-md-3">
-                      PHONE NUMBER:{' '}
-                      <h1 className="lead">
-                        <a
-                          href="tel:`${message.phoneNumber}`"
-                          style={{ color: '#000' }}
-                        >
-                          {' '}
-                          {message.phoneNumber}
-                        </a>
-                      </h1>
-                    </div>
-                    <div className="col-md-3">
-                      OFFER SELECTED:{' '}
-                      <h1 className="lead">
-                        {message && message.selectedOffer}
-                      </h1>
+                          SENDER:{' '}
+                          <h1 className="lead">
+                            {message.firstName} {message.surName}
+                          </h1>
+                        </div>
+                        <div className="col-md-3">
+                          EMAIL:{' '}
+                          <h1 className="lead">
+                            <a
+                              href="mailto:`${message.email}`"
+                              style={{ color: '#000' }}
+                            >
+                              {' '}
+                              {message.email}
+                            </a>
+                          </h1>
+                        </div>
+                        <div className="col-md-3">
+                          PHONE NUMBER:{' '}
+                          <h1 className="lead">
+                            <a
+                              href="tel:`${message.phoneNumber}`"
+                              style={{ color: '#000' }}
+                            >
+                              {' '}
+                              {message.phoneNumber}
+                            </a>
+                          </h1>
+                        </div>
+                        <div className="col-md-3">
+                          OFFER SELECTED:{' '}
+                          <h1 className="lead">
+                            {message && message.selectedOffer}
+                          </h1>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="row">
-            <div className="col-md-10  offset-md-1 mt-3">
-              <div className="card">
-                <div className="card-body">
-                  <div className="row">
-                    <div className="col-md-8">
-                      <h6 className="text-primary">Received Message:</h6>
-                    </div>
-                    <div className="col-md-4 text-success">
-                      Time: {moment(message.createdAt).fromNow()}
+              <div className="row">
+                <div className="col-md-10  offset-md-1 mt-3">
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-md-8">
+                          <h6 className="text-primary">Received Message:</h6>
+                        </div>
+                        <div className="col-md-4 text-success">
+                          Time: {moment(message.createdAt).fromNow()}
+                        </div>
+                      </div>
+                      {message.message ? (
+                        <div>{renderHTML(message.message)}</div>
+                      ) : null}
                     </div>
                   </div>
-                  {message.message ? (
-                    <div>{renderHTML(message.message)}</div>
-                  ) : null}
                 </div>
               </div>
-            </div>
-          </div>
 
-          {message && message.replyedMessage ? (
-            <div className="row">
-              <div className="col-md-10  offset-md-1 mt-3">
-                <div className="card">
-                  <div className="card-body">
-                    <div className="row">
-                      <div className="col-md-8">
-                        <h6 className="text-primary">Replyed Message:</h6>
-                      </div>
-                      <div className="col-md-4 text-success">
-                        Time: {moment(message.replyedDate).fromNow()}
-                      </div>
-                    </div>
-                    {/* {message.replyedMessage ? (
+              {message && message.replyedMessage ? (
+                <div className="row">
+                  <div className="col-md-10  offset-md-1 mt-3">
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="row">
+                          <div className="col-md-8">
+                            <h6 className="text-primary">Replyed Message:</h6>
+                          </div>
+                          <div className="col-md-4 text-success">
+                            Time: {moment(message.replyedDate).fromNow()}
+                          </div>
+                        </div>
+                        {/* {message.replyedMessage ? (
                     <div>{renderHTML(message.replyedMessage)}</div>
                   ) : null} */}
 
-                    {!success && message.replyedMessage ? (
-                      <div>{renderHTML(message.replyedMessage)}</div>
-                    ) : null}
+                        {!success && message.replyedMessage ? (
+                          <div>{renderHTML(message.replyedMessage)}</div>
+                        ) : null}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                ''
+              )}
             </div>
-          ) : (
-            ''
-          )}
-        </div>
-      </AdminRoute>
-    </Layout>
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 

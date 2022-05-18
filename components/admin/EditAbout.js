@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
+import PageLoader from '../layout/PageLoader';
 import { Progress, Spin } from 'antd';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import Loader from '../layout/Loader';
 import { useRouter } from 'next/router';
 import { Context } from '../../context';
 
@@ -18,6 +18,7 @@ const EditAbout = () => {
   });
   const [success, setSuccess] = useState(false);
   const [ok, setOk] = useState(false);
+  const [okey, setOkey] = useState(false);
   const [uploadButtonText, setUploadButtonText] = useState('Upload Video');
   const [video, setVideo] = useState({});
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,15 @@ const EditAbout = () => {
     dispatch,
   } = useContext(Context);
 
-  // console.log('previewVideo', video);
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
   useEffect(() => {
     loadSingleAbout();
@@ -124,99 +133,116 @@ const EditAbout = () => {
     }
   };
 
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOkey(false);
+      router.push('/');
+    }
+  };
+
   return (
-    <Layout title={`Manage ${slug}`}>
-      <AdminRoute>
-        <div className="container m-2">
-          <div className="row">
-            <div className="col-md-4">
-              <h1 className="lead">Manage About</h1>
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title={`Manage ${slug}`}>
+          <AdminRoute>
+            <div className="container m-2">
+              <div className="row">
+                <div className="col-md-4">
+                  <h1 className="lead">Manage About</h1>
+                </div>
+                <div className="col-md-4 offset-md-2"></div>
+              </div>
+              <hr />
+              <div className="row my-5">
+                <div className="col-md-6">
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <textarea
+                        rows="7"
+                        name="description"
+                        style={{ width: '100%', padding: '5px' }}
+                        value={values.description}
+                        onChange={handleChange}
+                      ></textarea>
+                    </div>
+                    <div className="d-grid gap-2 my-2 ">
+                      <button
+                        className="btn btn-primary"
+                        disabled={!values.description}
+                        type="submit"
+                      >
+                        {values.loading ? <Spin /> : 'Update Description'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <div className="col-md-4 offset-md-2">
+                  <form onSubmit={handleAboutVideoSubmit}>
+                    <div className="form-group">
+                      <label
+                        className="btn btn-dark btn-block text-left my-1 text-center float-right"
+                        style={{
+                          width: '50%',
+                          height: '20vh',
+                          padding: '50px',
+                        }}
+                      >
+                        {loading ? (
+                          <span className="spinLoader">
+                            <Spin />
+                          </span>
+                        ) : (
+                          `${uploadButtonText}`
+                        )}
+
+                        <input
+                          onChange={handleVideo}
+                          // value={values.video}
+                          type="file"
+                          accept="video/*"
+                          hidden
+                        />
+                      </label>
+                    </div>
+                    <div className="form-group">
+                      {progress > 0 && (
+                        <Progress
+                          className="d-flex justify-content-center pt-2 my-3"
+                          percent={progress}
+                          steps={10}
+                          style={{ marginRight: '152px' }}
+                        />
+                      )}
+                    </div>
+
+                    <div className="d-grid gap-2 my-2 ">
+                      <button
+                        className="btn btn-primary"
+                        disabled={loading}
+                        type="submit"
+                        style={{ width: '50%' }}
+                      >
+                        {ok ? <Spin /> : 'Update Video'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
-            <div className="col-md-4 offset-md-2"></div>
-          </div>
-          <hr />
-          <div className="row my-5">
-            <div className="col-md-6">
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <textarea
-                    rows="7"
-                    name="description"
-                    style={{ width: '100%', padding: '5px' }}
-                    value={values.description}
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
-                <div className="d-grid gap-2 my-2 ">
-                  <button
-                    className="btn btn-primary"
-                    disabled={!values.description}
-                    type="submit"
-                  >
-                    {values.loading ? <Spin /> : 'Update Description'}
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div className="col-md-4 offset-md-2">
-              <form onSubmit={handleAboutVideoSubmit}>
-                <div className="form-group">
-                  <label
-                    className="btn btn-dark btn-block text-left my-1 text-center float-right"
-                    style={{ width: '50%', height: '20vh', padding: '50px' }}
-                  >
-                    {loading ? (
-                      <span className="spinLoader">
-                        <Spin />
-                      </span>
-                    ) : (
-                      `${uploadButtonText}`
-                    )}
-
-                    <input
-                      onChange={handleVideo}
-                      // value={values.video}
-                      type="file"
-                      accept="video/*"
-                      hidden
-                    />
-                  </label>
-                </div>
-                <div className="form-group">
-                  {progress > 0 && (
-                    <Progress
-                      className="d-flex justify-content-center pt-2 my-3"
-                      percent={progress}
-                      steps={10}
-                      style={{ marginRight: '152px' }}
-                    />
-                  )}
-                </div>
-
-                <div className="d-grid gap-2 my-2 ">
-                  <button
-                    className="btn btn-primary"
-                    disabled={loading}
-                    type="submit"
-                    style={{ width: '50%' }}
-                  >
-                    {ok ? <Spin /> : 'Update Video'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        {/* {ok ? (
-          <Loader />
-        ) : (
-         
-        )} */}
-
-        {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
-      </AdminRoute>
-    </Layout>
+            {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 

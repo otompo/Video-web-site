@@ -10,16 +10,18 @@ import {
 } from '@ant-design/icons';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
-import TextTruncate from 'react-text-truncate';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Resizer from 'react-image-file-resizer';
 import Loader from '../layout/Loader';
 import { Context } from '../../context';
+import PageLoader from '../layout/PageLoader';
 
 const { confirm } = Modal;
 
 const ManagePartness = () => {
+  const router = useRouter();
   const [values, setValues] = useState({
     name: '',
     description: '',
@@ -27,12 +29,14 @@ const ManagePartness = () => {
   });
   const [success, setSuccess] = useState(false);
   const [ok, setOk] = useState(false);
+  const [okey, setOkey] = useState(false);
   const [partness, setPartness] = useState([]);
   const [uploadButtonText, setUploadButtonText] = useState('Upload Image');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
   const [profileImage, setProfileImage] = useState({});
+
   const {
     state: { user },
     dispatch,
@@ -53,6 +57,16 @@ const ManagePartness = () => {
   useEffect(() => {
     showPartness();
   }, [success]);
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -110,10 +124,10 @@ const ManagePartness = () => {
       try {
         let { data } = await axios.post(
           `/api/user/profileimage`,
-          { headers: { authorization: `Bearer ${user.token}` } },
           {
             profileImage: uri,
           },
+          { headers: { authorization: `Bearer ${user.token}` } },
         );
         // set image in the state
         setProfileImage(data);
@@ -126,6 +140,20 @@ const ManagePartness = () => {
         setLoading(false);
       }
     });
+  };
+
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user/currentuser', {
+        headers: { authorization: `Bearer ${user.token}` },
+      });
+      // console.log('data', data);
+      if (data.ok) setOkey(true);
+    } catch (err) {
+      console.log(err);
+      setOkey(false);
+      router.push('/');
+    }
   };
 
   const handleDelete = async (index) => {
@@ -220,107 +248,113 @@ const ManagePartness = () => {
   };
 
   return (
-    <Layout title="Manage Partness">
-      <AdminRoute>
-        <div className="container m-2">
-          <div className="row">
-            <div className="col-md-4">
-              <h1 className="lead">Manage Partness</h1>
-            </div>
-            <div className="col-md-4 offset-md-2">
-              <p
-                className="btn text-white float-right btn-success"
-                onClick={showModal}
-              >
-                {' '}
-                Add New Partner
-              </p>
-            </div>
-            <Modal
-              title="Add Partner"
-              visible={isModalVisible}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={null}
-            >
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    name="name"
-                    value={values.name}
-                    onChange={handleChange}
-                    className="form-control mb-4 p-2"
-                    placeholder="Enter name"
-                    required
-                  />
+    <>
+      {!okey ? (
+        <PageLoader />
+      ) : (
+        <Layout title="Manage Partness">
+          <AdminRoute>
+            <div className="container m-2">
+              <div className="row">
+                <div className="col-md-4">
+                  <h1 className="lead">Manage Partness</h1>
                 </div>
-
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label
-                        className="btn btn-dark btn-block text-left my-3 text-center"
-                        style={{ width: '100%' }}
-                      >
-                        {loading ? (
-                          <span className="spinLoader">
-                            <Spin />
-                          </span>
-                        ) : (
-                          `${uploadButtonText}`
-                        )}
-
-                        <input
-                          type="file"
-                          name="profileImage"
-                          size="large"
-                          onChange={handleImage}
-                          accept="image/*"
-                          hidden
-                        />
-                      </label>
-                    </div>
-                  </div>
-                  <div className="col-md-4 offset-2">
-                    <div className="form-group">
-                      {imagePreview ? (
-                        <Avatar size={60} src={imagePreview} />
-                      ) : (
-                        <Avatar size={60} src="/preview.ico" />
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="d-grid gap-2 my-2 ">
-                  <button
-                    className="btn btn-primary"
-                    disabled={!values.name || loading}
-                    type="submit"
+                <div className="col-md-4 offset-md-2">
+                  <p
+                    className="btn text-white float-right btn-success"
+                    onClick={showModal}
                   >
-                    {values.loading ? <SyncOutlined spin /> : 'Submit'}
-                  </button>
+                    {' '}
+                    Add New Partner
+                  </p>
                 </div>
-              </form>
-            </Modal>
-          </div>
-        </div>
-        <hr />
-        {ok ? (
-          <Loader />
-        ) : (
-          <MDBDataTable
-            data={setData()}
-            className="px-3"
-            bordered
-            striped
-            hover
-          />
-        )}
-        {/* <pre>{JSON.stringify(categories, null, 4)}</pre> */}
-      </AdminRoute>
-    </Layout>
+                <Modal
+                  title="Add Partner"
+                  visible={isModalVisible}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  footer={null}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="name"
+                        value={values.name}
+                        onChange={handleChange}
+                        className="form-control mb-4 p-2"
+                        placeholder="Enter name"
+                        required
+                      />
+                    </div>
+
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label
+                            className="btn btn-dark btn-block text-left my-3 text-center"
+                            style={{ width: '100%' }}
+                          >
+                            {loading ? (
+                              <span className="spinLoader">
+                                <Spin />
+                              </span>
+                            ) : (
+                              `${uploadButtonText}`
+                            )}
+
+                            <input
+                              type="file"
+                              name="profileImage"
+                              size="large"
+                              onChange={handleImage}
+                              accept="image/*"
+                              hidden
+                            />
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-md-4 offset-2">
+                        <div className="form-group">
+                          {imagePreview ? (
+                            <Avatar size={60} src={imagePreview} />
+                          ) : (
+                            <Avatar size={60} src="/preview.ico" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="d-grid gap-2 my-2 ">
+                      <button
+                        className="btn btn-primary"
+                        disabled={!values.name || loading}
+                        type="submit"
+                      >
+                        {values.loading ? <SyncOutlined spin /> : 'Submit'}
+                      </button>
+                    </div>
+                  </form>
+                </Modal>
+              </div>
+            </div>
+            <hr />
+            {ok ? (
+              <Loader />
+            ) : (
+              <MDBDataTable
+                data={setData()}
+                className="px-3"
+                bordered
+                striped
+                hover
+              />
+            )}
+            {/* <pre>{JSON.stringify(categories, null, 4)}</pre> */}
+          </AdminRoute>
+        </Layout>
+      )}
+    </>
   );
 };
 
