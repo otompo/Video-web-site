@@ -53,9 +53,7 @@ const UserProfilePage = () => {
   const loadUser = async () => {
     try {
       setOk(true);
-      const { data } = await axios.get(`/api/user/profile`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/user/profile`);
       setValues(data);
       setOk(false);
     } catch (err) {

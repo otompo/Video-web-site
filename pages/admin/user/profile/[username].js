@@ -25,9 +25,7 @@ const UserProfilePage = () => {
   const loadUser = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/profile/${username}`, {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get(`/api/profile/${username}`);
       // console.log(data);
       setUserInfor(data);
       setLoading(false);
@@ -42,9 +40,7 @@ const UserProfilePage = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data } = await axios.get('/api/user/currentuser', {
-        headers: { authorization: `Bearer ${user.token}` },
-      });
+      const { data } = await axios.get('/api/user/currentuser');
       // console.log('data', data);
       if (data.ok) setOkey(true);
     } catch (err) {
