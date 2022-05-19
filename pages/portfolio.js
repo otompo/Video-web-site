@@ -56,7 +56,7 @@ const Portfolio = () => {
                     <a>
                       <Card
                         hoverable
-                        // style={{ width: 240 }}
+                        style={{ height: '100%' }}
                         cover={
                           <Image
                             preview={false}

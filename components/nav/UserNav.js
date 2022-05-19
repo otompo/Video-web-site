@@ -42,27 +42,10 @@ const UserNav = () => {
           {user && user.profileImage ? (
             <Avatar
               size={32}
-              src={
-                user && user.profileImage && user.profileImage.Location
-                // <Image
-                //   src={user && user.profileImage.Location}
-                //   alt={user && user.picture}
-                // />
-              }
-              // alt={user.name}
+              src={user && user.profileImage && user.profileImage.Location}
             />
           ) : (
-            <Avatar
-              size={30}
-              src={
-                user && user.picture
-                // <Image
-                //   src={user && user.profileImage.Location}
-                //   alt={user && user.picture}
-                // />
-              }
-              // alt={user.name}
-            />
+            <Avatar size={30} src={user && user.picture} />
           )}{' '}
           {user && user.name}
         </a>
