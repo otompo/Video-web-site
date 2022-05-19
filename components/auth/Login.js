@@ -13,8 +13,8 @@ const Login = () => {
   const { state, dispatch } = useContext(Context);
   const { user } = state;
 
-  const [email, setEmail] = useState('sasco@gmail.com');
-  const [password, setPassword] = useState('otompo123@');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [ok, setOk] = useState(false);
 
@@ -25,16 +25,16 @@ const Login = () => {
     }
   }, [user]);
 
-  const fetchCurrentUser = async () => {
-    try {
-      const { data } = await axios.get('/api/user/currentuser');
-      // console.log('data', data);
-      if (data.ok) setOk(true);
-    } catch (err) {
-      console.log(err);
-      setOk(false);
-    }
-  };
+  // const fetchCurrentUser = async () => {
+  //   try {
+  //     const { data } = await axios.get('/api/user/currentuser');
+  //     // console.log('data', data);
+  //     if (data.ok) setOk(true);
+  //   } catch (err) {
+  //     console.log(err);
+  //     setOk(false);
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
