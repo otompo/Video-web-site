@@ -165,7 +165,10 @@ const SingleOfferMessage = () => {
             <h1 className="lead"> City: {message && message.city}</h1>
           </div>
           <div className="col-md-3">
-            <h1 className="lead"> Budget: {message && message.budget}</h1>
+            <h1 className="lead">
+              {' '}
+              Budget: Kr {Number(message && message.budget).toFixed(2)}
+            </h1>
           </div>
           <div className="col-md-3">
             {message && message.replyed ? (

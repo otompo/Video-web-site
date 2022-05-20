@@ -15,7 +15,7 @@ const Index = () => {
                 <TopTitle
                   welc={'Prices'}
                   slogan={
-                    'Our style is natural and we delivers great service that can benefit all kinds of people'
+                    'Our style is natural we delivers great prices that can benefit all kinds of people'
                   }
                 />
               </div>

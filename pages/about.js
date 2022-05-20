@@ -13,7 +13,7 @@ const Index = () => {
               <div className="text-center" style={{ marginTop: '150px' }}>
                 <TopTitle
                   slogan={
-                    'We are innovate and provide advanced quality products and exclusive solutions.'
+                    'We are innovative and provide advanced quality services and exclusive solutions.'
                   }
                   welc={'ABOUT'}
                 />

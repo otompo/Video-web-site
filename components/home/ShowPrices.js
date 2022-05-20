@@ -142,9 +142,9 @@ function ShowPrices(props) {
               </div>
               <p className="text-center">
                 Tell us your NEEDS and BUDGET. The price of a video production
-                depends a lot on your needs and budget. You are welcome to
-                describe your wishes here, so that together we can find the
-                right solution and price for you.
+                depends a lot on which solution you want. Feel free to de-scribe
+                your wishes and your budget here, so that together we can find
+                the right solution and price for you.
               </p>
               <div className="card-body">
                 <form onSubmit={handleSubmit} className="row">
@@ -175,7 +175,7 @@ function ShowPrices(props) {
                   <div className="col-md-6">
                     <div className="form-group">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control mb-4 p-2"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
@@ -199,7 +199,7 @@ function ShowPrices(props) {
                   <div className="col-md-6">
                     <div className="form-group">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control mb-4 p-2"
                         value={budget}
                         onChange={(e) => setBudget(e.target.value)}
@@ -227,12 +227,12 @@ function ShowPrices(props) {
                       style={{ width: '100%', padding: 10 }}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Tell us your needs"
+                      placeholder="Tell us your needs and budget"
                     ></textarea>
                   </div>
                   <p className="text-center ">
-                    We will responses to your inquiry by email within the next
-                    24 hours
+                    You will receive a non-binding quote within 24 hours (all
+                    prices are inc. VAT)
                   </p>
                   {/* <div className="col-md-12">
                 <div className="form-group">{showCategories()}</div>

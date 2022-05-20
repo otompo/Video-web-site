@@ -162,7 +162,7 @@ const ManageOfferMessages = () => {
           phoneNumber: `${message.phoneNumber}`,
           city: `${message.city}`,
           selectedoffer: `${message.selectedOffer}`,
-          budget: `${message.budget}`,
+          budget: `Kr ${Number(message.budget).toFixed(2)}`,
           send: `${moment(message.createdAt).fromNow()}`,
           view: (
             <Tooltip title="View message">

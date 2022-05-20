@@ -101,7 +101,7 @@ function ContactForm() {
           <div className="card-title text-center fw-bolder">GET OFFER HERE</div>
           <p className="text-center">
             The price of a video production depends a lot on which solution you
-            want. Feel free to describe your wishes here. so that together we
+            want. Feel free to describe your wish and budget so that together we
             find the right solution and price for you.
           </p>
           <div className="card-body">

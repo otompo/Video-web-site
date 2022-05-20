@@ -14,7 +14,7 @@ const ContactUs = () => {
               <div className="text-center" style={{ marginTop: '150px' }}>
                 <TopTitle
                   slogan={
-                    "While we're good with our services, there are simpler ways for us to get in touch and answer your questions"
+                    "While we're good with our services, there are simpler ways for you to get in touch and answer your questions"
                   }
                   welc={'Contact'}
                 />
