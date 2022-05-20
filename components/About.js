@@ -25,47 +25,45 @@ const About = () => {
   return (
     <div className="container about" id="about">
       <div className="row">
-        <div className="col-md-6 my-5">
-          {ok ? (
-            <Loader />
-          ) : (
-            abouts &&
-            abouts.map((about, i) => (
-              <>
+        {ok ? (
+          <Loader />
+        ) : (
+          abouts &&
+          abouts.map((about, i) => (
+            <>
+              <div className="col-md-6  mt-5" key={i}>
                 <ReactPlayer
                   url={about && about.video && about.video.Location}
                   controls={true}
                   width="100%"
-                  height="380px"
+                  // height="380px"
                   playing={false}
                   muted={false}
                   loop={false}
                 />
-              </>
-            ))
-          )}
-        </div>
+              </div>
+              <div className="col-md-6  mt-5">
+                <p className="content">{about.description}</p>
+                <div className="social-icons">
+                  <a
+                    target="_blank"
+                    href="https://web.facebook.com/afrotalian1"
+                  >
+                    <i className="fab fa-facebook-f" />
+                  </a>
 
-        <div className="col-md-6 my-5">
-          <h2 className="text-center">About</h2>
-          <span className="line"></span>
-          {abouts &&
-            abouts.map((about, i) => <p Key={i}>{about.description}</p>)}
+                  <a href="/" target="_blank">
+                    <i className="fab fa-instagram" />
+                  </a>
 
-          <div className="social-icons">
-            <a target="_blank" href="https://web.facebook.com/afrotalian1">
-              <i className="fab fa-facebook-f" />
-            </a>
-
-            <a href="/" target="_blank">
-              <i className="fab fa-instagram" />
-            </a>
-
-            <a href="/" target="_blank">
-              <i className="fab fa-linkedin" />
-            </a>
-          </div>
-        </div>
+                  <a href="/" target="_blank">
+                    <i className="fab fa-linkedin" />
+                  </a>
+                </div>
+              </div>
+            </>
+          ))
+        )}
       </div>
     </div>
   );

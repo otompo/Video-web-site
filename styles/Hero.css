@@ -83,7 +83,8 @@
 .hero .content .mx-auto {
   font-size: 2rem;
   font-style: italic;
-  color: #f58220;
+  color: #ffffff;
+  text-shadow: 0.5px 1.5px #323232;
 }
 
 .hero .video {

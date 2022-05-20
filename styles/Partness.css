@@ -14,7 +14,13 @@
   color: #fff;
   text-align: center;
 }
-
+.partness-container .card {
+  border: 1px solid #aabfd2 !important;
+}
+.partness-container .card-body {
+  background: #aabfd2 !important;
+  border: 1px solid #aabfd2 !important;
+}
 .monial {
   height: 260px;
   background: #eee;

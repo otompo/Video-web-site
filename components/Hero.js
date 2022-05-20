@@ -23,7 +23,7 @@ const Hero = () => {
   return (
     <div className="hero" id="hero">
       <video autoPlay loop muted className="w-full h-screen z-10 video">
-        <source src="/videos/video-2.mp4" type="video/mp4" />
+        <source src="/videos/video-1.mp4" type="video/mp4" />
       </video>
       <div className="container">
         <div className="row">
@@ -46,7 +46,7 @@ const Hero = () => {
               </p> */}
               <p>VIDEO CREATION THAT TELL YOUR STORY</p>
               <button href="/" className="button center" onClick={showModal}>
-                GET OFFER Now
+                GET OFFER NOW
               </button>
               <Modal
                 title="GET OFFER HERE"
@@ -57,32 +57,6 @@ const Hero = () => {
               >
                 <ContactForm />
               </Modal>
-              {/* <p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 arrow"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </p> */}
-              {/* <p>
-                <div class="center-con">
-                  <a data-scroll href="#bob">
-                    <div class="round">
-                      <div id="cta">
-                        <span class="arrow primera next"></span>
-                        <span class="arrow segunda next"></span>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </p> */}
             </div>
           </div>
         </div>

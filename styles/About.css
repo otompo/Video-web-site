@@ -4,10 +4,10 @@
 .about h2 {
   font-size: 3rem;
 }
-
+/* 
 .about p:first-of-type {
   margin: 2.5rem 0;
-}
+} */
 
 .about p:nth-child(4) {
   font-size: 2.8rem;
@@ -32,6 +32,14 @@
   border-radius: 100%;
   justify-content: center;
   text-align: center;
+}
+
+#about .content {
+  justify-content: center;
+  text-align: justify;
+  align-items: center;
+  font-size: 18px;
+  line-height: 2rem;
 }
 
 #about .social-icons > a:hover {

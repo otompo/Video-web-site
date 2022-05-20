@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="footer-link-items">
             <h3>ADDRESS</h3>
 
-            <p>Geoge Wame Bonny</p>
+            <p>George Kwame Bonney</p>
             <p>Kalundborg-Denmark</p>
             <p>
               <a href="tel:+4591431537">+45 91 41 21 61</a>

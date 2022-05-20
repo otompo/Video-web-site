@@ -327,7 +327,7 @@ const ManageServices = () => {
                       <textarea
                         rows="7"
                         name="description"
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', padding: '5px' }}
                         value={values.description}
                         onChange={handleChange}
                         className="p-2"

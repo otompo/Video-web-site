@@ -24,34 +24,35 @@ const InfoSection = () => {
   };
 
   return (
-    <div className="container-fluid" id="infoSection">
+    <div className="container" id="infoSection">
       <div className="row">
-        <div className="col-md-6 offset-md-4">
-          <>
-            {ok ? (
-              <Loader />
-            ) : (
-              abouts &&
-              abouts.map((about, i) => (
-                <>
+        <>
+          {ok ? (
+            <Loader />
+          ) : (
+            abouts &&
+            abouts.map((about, i) => (
+              <>
+                <div className="col-md-6  mt-5" key={i}>
                   <div className="player">
                     <ReactPlayer
                       url={about && about.video && about.video.Location}
                       controls={true}
                       width="100%"
-                      height="450px"
+                      // height="450px"
                       playing={false}
                       muted={false}
                       loop={false}
                     />
                   </div>
-                  <p className="content my-3">{about.description}</p>
-                </>
-              ))
-            )}
-            {/* <pre>{JSON.stringify(abouts, null, 4)}</pre> */}
-          </>
-        </div>
+                </div>
+                <div className="col-md-6  mt-5">
+                  <p className="content">{about.description}</p>
+                </div>
+              </>
+            ))
+          )}
+        </>
       </div>
     </div>
   );
