@@ -8,13 +8,11 @@ const ContactCard = ({ title, body, icon, button }) => {
         <div
           className="card"
           style={{
-            minHeight: '250px',
             backgroundColor: '#fff',
             borderRadius: '4px',
             boxShadow: '0 1px 6px 1px rgb(0 0 0 / 15%)',
             maxWidth: '500px',
-            height: '50vh',
-            height: 'auto',
+            height: '85%',
             padding: '1rem',
             marginBottom: '50px',
           }}

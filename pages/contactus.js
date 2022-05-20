@@ -36,7 +36,7 @@ const ContactUs = () => {
                   </h5>
                 }
                 body={
-                  'We perfectly program your website across NextJS with Node express server, WordPress, HTML and Joomla to ensure it characteristic tells a story.'
+                  'Reach us by calling the number above and our customer service representative will be glad to help you.'
                 }
               />
             </div>
@@ -53,9 +53,9 @@ const ContactUs = () => {
                     <path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z" />
                   </svg>
                 }
-                title={'Second floor Queen of Peace Building '}
+                title={'Kalundborg-Denmark'}
                 body={
-                  'We perfectly program your website across NextJS with Node express server, WordPress, HTML and Joomla to ensure it characteristic tells a story.'
+                  'Visit us on the on the above address so that we can discuss your amazing project.'
                 }
               />
             </div>
@@ -64,14 +64,14 @@ const ContactUs = () => {
                 icon={<MailFilled style={{ fontSize: '110px' }} />}
                 title={
                   <a
-                    href="mailto:info@codesmartwebsoft.com"
+                    href="mailto:info@afrotalian.com"
                     style={{ color: '#000' }}
                   >
-                    info@codesmartwebsoft.com
+                    info@afrotalian.com
                   </a>
                 }
                 body={
-                  'We perfectly program your website across NextJS with Node express server, WordPress, HTML and Joomla to ensure it characteristic tells a story.'
+                  'Email us now, so we can contact you to discuss your beautiful project. We cant wait to start an amazing journey with you.'
                 }
               />
             </div>

@@ -39,7 +39,6 @@ const InfoSection = () => {
                       url={about && about.video && about.video.Location}
                       controls={true}
                       width="100%"
-                      // height="450px"
                       playing={false}
                       muted={false}
                       loop={false}

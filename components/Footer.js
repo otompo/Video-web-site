@@ -15,7 +15,10 @@ const Footer = () => {
             <p>
               <a href="tel:+4591431537">+45 91 41 21 61</a>
             </p>
-            <p>Email:</p>
+            <p>
+              Email:{' '}
+              <a href="mailto:info@afrotalian.com">info@afrotalian.com</a>
+            </p>
             <p>CVR: 39964074</p>
           </div>
 
@@ -98,11 +101,11 @@ const Footer = () => {
               <i className="fab fa-facebook-f" />
             </a>
 
-            <a href="/" target="_blank">
+            <a href="https://web.facebook.com/afrotalian1" target="_blank">
               <i className="fab fa-instagram" />
             </a>
 
-            <a href="/" target="_blank">
+            <a href="https://web.facebook.com/afrotalian1" target="_blank">
               <i className="fab fa-linkedin" />
             </a>
           </div>

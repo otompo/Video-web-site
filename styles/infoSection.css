@@ -13,18 +13,17 @@
 .offset-md-4 {
   margin-left: 24.333333% !important;
 }
+/* 
 #infoSection .player {
-  margin-top: 15px !important;
+  margin-top: 1px !important;
   margin-bottom: 20px;
-}
+} */
 
 /*--For mobile devices--*/
 @media (max-width: 480px) {
   #infoSection .player {
-    margin-top: -97px !important;
-    margin-bottom: 20px;
-    width: 89% !important;
-    /* height: 303px !important; */
+    /* width: 89% !important; */
+    margin-top: -60px !important;
   }
 
   .offset-md-4 {
@@ -44,9 +43,9 @@
 
 /*-----For tablets: ---------------*/
 @media (min-width: 481px) and (max-width: 1024px) {
-  #infoSection .player {
+  /* #infoSection .player {
     margin-left: -167px !important;
-  }
+  } */
 
   .offset-md-4 {
     margin-left: 24.333333% !important;
