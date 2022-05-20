@@ -33,7 +33,7 @@ const InfoSection = () => {
             abouts &&
             abouts.map((about, i) => (
               <>
-                <div className="col-md-6  mt-5" key={i}>
+                <div className="col-md-6  my-5" key={i}>
                   <div className="player">
                     <ReactPlayer
                       url={about && about.video && about.video.Location}
@@ -45,7 +45,7 @@ const InfoSection = () => {
                     />
                   </div>
                 </div>
-                <div className="col-md-6  mt-5">
+                <div className="col-md-6  my-5">
                   <p className="content">{about.description}</p>
                 </div>
               </>

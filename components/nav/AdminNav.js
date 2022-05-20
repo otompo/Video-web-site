@@ -79,6 +79,15 @@ const AdminNav = () => {
           Price Offer Message
         </a>
       </Link>
+      <Link href="/admin/teamsofservice">
+        <a
+          className={`nav-link  ${
+            current === '/admin/teamsofservice' && 'active'
+          }`}
+        >
+          Team of Service
+        </a>
+      </Link>
       <Link href="/admin/services">
         <a className={`nav-link  ${current === '/admin/services' && 'active'}`}>
           Services

@@ -13,7 +13,7 @@ function ContactForm() {
   const [checked, setChecked] = useState([]); // categories
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-  // console.log('selectedCategory', selectedCategory);
+
   useEffect(() => {
     loadCategories();
   }, []);

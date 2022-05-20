@@ -84,7 +84,7 @@ const Footer = () => {
           <small className="website-rights">
             Afrotalain Production © {new Date().getFullYear()} Inc. All rights
             reserved CVR/Danish business-39964074 <br />
-            <p className="text-center">
+            {/* <p className="text-center">
               Powered by{' '}
               <a
                 style={{ fontSize: 15 }}
@@ -94,9 +94,9 @@ const Footer = () => {
               >
                 Code Smart Websoft
               </a>
-            </p>
+            </p> */}
           </small>
-          <div className="social-icons">
+          <div className="social-icons ml-3">
             <a target="_blank" href="https://web.facebook.com/afrotalian1">
               <i className="fab fa-facebook-f" />
             </a>

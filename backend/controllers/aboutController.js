@@ -45,8 +45,8 @@ export const getSingleAbout = catchAsync(async (req, res, next) => {
 
 export const updateAbout = catchAsync(async (req, res, next) => {
   const { slug } = req.query;
-  const blog = await About.findOne({ slug });
-  if (!blog) {
+  const about = await About.findOne({ slug });
+  if (!about) {
     return next(new AppError('About not found', 404));
   }
 

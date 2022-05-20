@@ -19,14 +19,15 @@
   margin-top: 1rem;
 }
 
-.about .social-icons {
+#about .social-icons {
   font-size: 1.5rem;
+  width: 150px;
 }
 
 #about .social-icons > a {
   color: #fff;
   height: 2.5rem;
-  width: 3.5rem;
+  width: 4.5rem;
   margin: 5px;
   background-color: #000;
   border-radius: 100%;

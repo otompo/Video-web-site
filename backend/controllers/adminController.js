@@ -1,4 +1,5 @@
 import User from '../models/userModel';
+import TeamsOfService from '../models/teamsOfServiceModel';
 import catchAsync from '../utils/catchAsync';
 import { nanoid } from 'nanoid';
 import AppError from '../utils/appError';
@@ -95,4 +96,45 @@ export const removeUserAsAdmin = catchAsync(async (req, res, next) => {
   );
   res.send({ ok: true });
   // console.log(roleUpdated);
+});
+
+export const createTeamsOfService = catchAsync(async (req, res, next) => {
+  const { description } = req.body;
+  if (!description) {
+    return next(new AppError('description is empty'));
+  }
+  const teamsofservice = await new TeamsOfService({
+    slug: `${nanoid(5)}`,
+    description,
+  }).save();
+  res.send(teamsofservice);
+});
+
+export const getTeamsOfService = catchAsync(async (req, res, next) => {
+  const teamsofservice = await TeamsOfService.find({});
+  res.send(teamsofservice);
+});
+
+export const readTeamsOfService = catchAsync(async (req, res, next) => {
+  const teamsofservice = await TeamsOfService.findOne({ slug: req.query.slug });
+  res.send(teamsofservice);
+});
+
+export const updateTeamsOfService = catchAsync(async (req, res, next) => {
+  const { slug } = req.query;
+  const blog = await TeamsOfService.findOne({ slug });
+  if (!blog) {
+    return next(new AppError('Teams Of Service not found', 404));
+  }
+
+  const updated = await TeamsOfService.findOneAndUpdate(
+    { slug },
+    {
+      ...req.body,
+    },
+    {
+      new: true,
+    },
+  );
+  res.json(updated);
 });

@@ -142,7 +142,7 @@ const EditAbout = () => {
       ) : (
         <Layout title={`Manage ${slug}`}>
           <AdminRoute>
-            <div className="container m-2">
+            <div className="container-fluid m-2">
               <div className="row">
                 <div className="col-md-4">
                   <h1 className="lead">Manage About</h1>
@@ -151,13 +151,17 @@ const EditAbout = () => {
               </div>
               <hr />
               <div className="row my-5">
-                <div className="col-md-6">
+                <div className="col-md-7">
                   <form onSubmit={handleSubmit}>
                     <div className="form-group">
                       <textarea
                         rows="7"
                         name="description"
-                        style={{ width: '100%', padding: '5px' }}
+                        style={{
+                          width: '100%',
+                          height: '30vh',
+                          padding: '5px',
+                        }}
                         value={values.description}
                         onChange={handleChange}
                       ></textarea>
@@ -173,7 +177,7 @@ const EditAbout = () => {
                     </div>
                   </form>
                 </div>
-                <div className="col-md-4 offset-md-2">
+                <div className="col-md-4 offset-md-1">
                   <form onSubmit={handleAboutVideoSubmit}>
                     <div className="form-group">
                       <label

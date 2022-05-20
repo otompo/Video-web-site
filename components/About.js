@@ -6,7 +6,6 @@ import Loader from './layout/Loader';
 const About = () => {
   const [abouts, setAbouts] = useState([]);
   const [ok, setOk] = useState(false);
-
   useEffect(() => {
     showAbout();
   }, []);
@@ -22,6 +21,7 @@ const About = () => {
       setOk(false);
     }
   };
+
   return (
     <div className="container about" id="about">
       <div className="row">
