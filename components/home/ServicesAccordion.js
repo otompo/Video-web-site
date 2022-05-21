@@ -34,10 +34,22 @@ function ServicesAccordion(props) {
               services.map((service, i) => (
                 <>
                   <div className="col-md-4 my-3" key={i}>
-                    <div className="card" style={{ height: '100%' }}>
-                      <div className="card-body">
+                    <div
+                      className="card"
+                      style={{
+                        height: '100%',
+                      }}
+                    >
+                      <div
+                        className="card-body"
+                        style={{
+                          padding: '0px',
+                          objectFit: 'cover',
+                        }}
+                      >
                         <Image
                           preview={false}
+                          height="100%"
                           src={
                             service && service.image && service.image.Location
                           }

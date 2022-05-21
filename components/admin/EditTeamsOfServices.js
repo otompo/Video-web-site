@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import PageLoader from '../layout/PageLoader';
-import { Progress, Spin } from 'antd';
+import { Spin } from 'antd';
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
 import axios from 'axios';

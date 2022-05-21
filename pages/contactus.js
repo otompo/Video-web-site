@@ -55,7 +55,7 @@ const ContactUs = () => {
                 }
                 title={'Kalundborg-Denmark'}
                 body={
-                  'Visit us on the on the above address so that we can discuss your amazing project.'
+                  'Visit us on the above address so that we can discuss your amazing project.'
                 }
               />
             </div>
