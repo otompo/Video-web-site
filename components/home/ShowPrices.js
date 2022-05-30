@@ -138,7 +138,7 @@ function ShowPrices(props) {
           <div className="col-md-12">
             <div className="card">
               <div className="card-title text-center fw-bolder">
-                GET OFFER HERE
+                GET OFFER NOW
               </div>
               <p className="text-center">
                 Tell us your NEEDS and BUDGET. The price of a video production
@@ -176,6 +176,8 @@ function ShowPrices(props) {
                     <div className="form-group">
                       <input
                         type="number"
+                        min="0"
+                        step="1"
                         className="form-control mb-4 p-2"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
@@ -200,6 +202,8 @@ function ShowPrices(props) {
                     <div className="form-group">
                       <input
                         type="number"
+                        min="0"
+                        step="1"
                         className="form-control mb-4 p-2"
                         value={budget}
                         onChange={(e) => setBudget(e.target.value)}
@@ -240,7 +244,15 @@ function ShowPrices(props) {
                   <div className="d-grid gap-2 my-2 ">
                     <button
                       className="btn btn-primary"
-                      // disabled={!name || !email || !subject || !message}
+                      disabled={
+                        !firstName ||
+                        !surName ||
+                        !phoneNumber ||
+                        !city ||
+                        !budget ||
+                        !email ||
+                        !message
+                      }
                       type="submit"
                     >
                       {loading ? <Spin /> : 'Submit'}

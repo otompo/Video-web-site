@@ -159,7 +159,7 @@ const ManageReviews = () => {
         },
       });
     } catch (err) {
-      toast.error(err);
+      toast.error(err.response);
       setValues({ ...values, loading: false });
     }
   };
@@ -211,7 +211,7 @@ const ManageReviews = () => {
                 <div className="col-md-12">
                   <span onClick={() => handleDelete(index)}>
                     <DeleteOutlined
-                      className="text-danger d-flex justify-content-center "
+                      className="text-danger d-flex justify-content-center"
                       style={{ cursor: 'pointer' }}
                     />
                   </span>
@@ -234,10 +234,10 @@ const ManageReviews = () => {
           <AdminRoute>
             <div className="container m-2">
               <div className="row">
-                <div className="col-md-4">
+                <div className="col-md-8">
                   <h1 className="lead">Manage Reviews</h1>
                 </div>
-                <div className="col-md-4 offset-md-2">
+                <div className="col-md-4">
                   <p
                     className="btn text-white float-right btn-success"
                     onClick={showModal}

@@ -98,7 +98,7 @@ function ContactForm() {
     <div className="row">
       <div className="col-md-12">
         <div className="card">
-          <div className="card-title text-center fw-bolder">GET OFFER HERE</div>
+          <div className="card-title text-center fw-bolder">GET OFFER NOW</div>
           <p className="text-center">
             The price of a video production depends a lot on which solution you
             want. Feel free to describe your wish and budget so that together we
@@ -133,7 +133,9 @@ function ContactForm() {
               <div className="col-md-6">
                 <div className="form-group">
                   <input
-                    type="text"
+                    type="number"
+                    min="0"
+                    step="1"
                     className="form-control mb-4 p-2"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
@@ -172,7 +174,12 @@ function ContactForm() {
                 <button
                   className="btn btn-primary"
                   disabled={
-                    !firstName || !email || !surName || !phoneNumber || !message
+                    !firstName ||
+                    !email ||
+                    !surName ||
+                    !phoneNumber ||
+                    !message ||
+                    !selectedCategory
                   }
                   type="submit"
                 >

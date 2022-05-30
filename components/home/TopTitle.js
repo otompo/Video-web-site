@@ -4,18 +4,21 @@ const TopTitle = ({ cname, welc, slogan }) => {
   return (
     <Fragment>
       <span className="text-center save">
-        <h1>{welc}</h1>
+        <h1
+          style={{
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+          }}
+        >
+          {welc}
+        </h1>
 
         <h5
           style={{
             fontSize: 20,
             fontWeight: 'bold',
             color: '#fff000',
-            // color: '#f58220',
-            // height: 50,
-            // width: 50,
-            // borderRadius: 25,
-            // backgroundColor: 'red',
+            textTransform: 'uppercase',
           }}
         >
           {cname}

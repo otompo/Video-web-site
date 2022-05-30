@@ -22,6 +22,7 @@ const Layout = ({ children, title = 'Afrotalian' }) => {
     <div>
       <Head>
         <title>{title}</title>
+        <link rel="icon" href="/favicon.ico" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta
@@ -46,16 +47,25 @@ const Layout = ({ children, title = 'Afrotalian' }) => {
           Family videos
           Business events videos"
         />
-
         <meta property="og:site_name" content="Afrotalian" />
         <meta
           property="og:image"
-          content="https://codesmartwebsoft.com/img/default.png"
+          content="https://afrotalian.com/img/default.png"
         />
         <meta
           property="og:image:secure_url"
-          content="https://codesmartwebsoft.com/img/default.png"
+          content="https://afrotalian.com/img/default.png"
         />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css"
+        />
+        <script
+          defer
+          src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+          integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc"
+          crossOrigin="anonymous"
+        ></script>
       </Head>
 
       <Navbar />

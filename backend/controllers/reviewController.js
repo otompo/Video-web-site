@@ -78,8 +78,8 @@ export const deleteReview = catchAsync(async (req, res, next) => {
   const review = await Review.findById(req.query.id);
 
   const params = {
-    Bucket: price.video.Bucket,
-    Key: price.video.Key,
+    Bucket: review.video.Bucket,
+    Key: review.video.Key,
   };
   // send remove request to S3
   S3.deleteObject(params, (err, data) => {
@@ -88,14 +88,11 @@ export const deleteReview = catchAsync(async (req, res, next) => {
       res.sendStatus(400);
     }
   });
-
   if (!review) {
-    return next(new AppError('Review not found with this ID', 400));
+    return next(new AppError('Review not found', 404));
   }
 
-  await review.remove();
+  const data = await Review.findByIdAndRemove(review._id);
 
-  res.status(200).json({
-    success: true,
-  });
+  res.json({ message: 'review Deleted' });
 });

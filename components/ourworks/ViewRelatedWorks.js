@@ -6,6 +6,7 @@ import PricesCard from '../home/PricesCard';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
 import TopTitle from '../home/TopTitle';
+import Zoom from 'react-reveal/Zoom';
 
 const ViewRelatedWorks = () => {
   const router = useRouter();
@@ -70,18 +71,20 @@ const ViewRelatedWorks = () => {
             ) : (
               relatedWorks.map((item) => (
                 <div className="col-md-3 my-4" key={item._id}>
-                  <PricesCard
-                    video={
-                      <ReactPlayer
-                        url={item && item.video && item.video.Location}
-                        controls={true}
-                        width="100%"
-                        height="auto"
-                      />
-                    }
-                    title={item && item.name}
-                    body={item && item.description}
-                  />
+                  <Zoom>
+                    <div className="parent">
+                      <div className="child">
+                        <div className="video-content">
+                          <ReactPlayer
+                            url={item && item.video && item.video.Location}
+                            controls={true}
+                            width="100%"
+                            height="30vh"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Zoom>
                 </div>
               ))
             )}
