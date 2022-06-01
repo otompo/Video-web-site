@@ -35,14 +35,14 @@ const TestimonialSlider = () => {
         </div>
         <div className="row">
           <div className="col-md-8 offset-md-2">
-            <Carousel interval={1000}>
+            <Carousel interval={null}>
               {ok ? (
                 <Loader />
               ) : (
                 reviews &&
                 reviews.map((review, i) => {
                   return (
-                    <Carousel.Item interval={5000}>
+                    <Carousel.Item>
                       <div className="carouselUnit" key={i}>
                         <Carousel.Caption>
                           <div className="row">

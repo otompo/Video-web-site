@@ -23,7 +23,8 @@
   display: none !important;
 }
 .carousel-indicators {
-  margin-bottom: 10rem !important;
+  /* margin-bottom: 10rem !important; */
+  bottom: 170px !important;
 }
 
 .carouselUnit {
@@ -31,7 +32,12 @@
   background: #f3f3f3;
   margin: 30px;
 }
-
+.carousel-indicators [data-bs-target] {
+  /* background-color: red !important; */
+  border-radius: 50% !important;
+  height: 17px !important;
+  width: 17px !important;
+}
 .monial {
   height: 260px;
   background: #eee;

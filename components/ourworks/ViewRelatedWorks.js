@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../layout/Layout';
 import Loader from '../layout/Loader';
-import PricesCard from '../home/PricesCard';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
 import TopTitle from '../home/TopTitle';
@@ -11,7 +10,6 @@ import Zoom from 'react-reveal/Zoom';
 const ViewRelatedWorks = () => {
   const router = useRouter();
   const { slug } = router.query;
-
   const [loading, setLoading] = useState(false);
   const [relatedWorks, setRelatedWorks] = useState([]);
 

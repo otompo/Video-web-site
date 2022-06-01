@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import moment from 'moment';
+import { PhoneFilled, MailFilled, WhatsAppOutlined } from '@ant-design/icons';
 
 const Footer = () => {
   return (
@@ -13,10 +13,17 @@ const Footer = () => {
             <p>George Kwame Bonney</p>
             <p>Kalundborg-Denmark</p>
             <p>
+              <PhoneFilled size={15} rotate={110} />{' '}
               <a href="tel:+4591431537">+45 91 41 21 61</a>
             </p>
             <p>
-              Email:{' '}
+              <WhatsAppOutlined size={15} rotate={-100} />{' '}
+              <a href="https://wa.me/4591412161" target="_blank">
+                +45 91 41 21 61
+              </a>
+            </p>
+            <p>
+              <MailFilled size={15} />{' '}
               <a href="mailto:info@afrotalian.com">info@afrotalian.com</a>
             </p>
             <p>CVR: 39964074</p>

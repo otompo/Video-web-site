@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import TopTitle from '../components/home/TopTitle';
-import { PhoneFilled, MailFilled } from '@ant-design/icons';
+import { PhoneFilled, MailFilled, WhatsAppOutlined } from '@ant-design/icons';
 import ContactCard from '../components/home/ContactCard';
 import Layout from '../components/layout/Layout';
+import Link from 'next/link';
 
 const ContactUs = () => {
   return (
@@ -24,14 +25,16 @@ const ContactUs = () => {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-md-4 my-3 text-center">
+            <div className="col-md-3 my-3 text-center">
               <ContactCard
-                icon={<PhoneFilled style={{ fontSize: '110px' }} />}
+                icon={
+                  <PhoneFilled style={{ fontSize: '110px' }} rotate={110} />
+                }
                 title={
                   <h5>
-                    <a href="tel:+4591431537" style={{ color: '#000' }}>
+                    <a href="tel:+4591412161" style={{ color: '#000' }}>
                       {' '}
-                      +45 91 43 15 37
+                      +45 91 41 21 61
                     </a>
                   </h5>
                 }
@@ -40,7 +43,27 @@ const ContactUs = () => {
                 }
               />
             </div>
-            <div className="col-md-4 my-3 text-center">
+            <div className="col-md-3 my-3 text-center">
+              <ContactCard
+                icon={<WhatsAppOutlined style={{ fontSize: '110px' }} />}
+                title={
+                  <h5>
+                    <a
+                      target="_blank"
+                      href="https://wa.me/4591412161"
+                      style={{ color: '#000' }}
+                    >
+                      {' '}
+                      +45 91 41 21 61
+                    </a>
+                  </h5>
+                }
+                body={
+                  'You can also reach us through this whatsapp number provided above and our customer service representative will be glad to help you.'
+                }
+              />
+            </div>
+            <div className="col-md-3 my-3 text-center">
               <ContactCard
                 icon={
                   <svg
@@ -59,7 +82,7 @@ const ContactUs = () => {
                 }
               />
             </div>
-            <div className="col-md-4 my-3 text-center">
+            <div className="col-md-3 my-3 text-center">
               <ContactCard
                 icon={<MailFilled style={{ fontSize: '110px' }} />}
                 title={
