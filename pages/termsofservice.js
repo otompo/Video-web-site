@@ -3,6 +3,7 @@ import TopTitle from '../components/home/TopTitle';
 import axios from 'axios';
 import Layout from '../components/layout/Layout';
 import { LoadingOutlined } from '@ant-design/icons';
+import renderHTML from 'react-render-html';
 
 const TeamsOfService = () => {
   const [teams, setTeams] = useState([]);
@@ -40,12 +41,12 @@ const TeamsOfService = () => {
 
   return (
     <>
-      <Layout title="Teams of service">
+      <Layout title="Terms of Service">
         <div className="container-fluid industries-bnr">
           <div className="row">
             <div className="col-md-6 offset-md-3">
               <div className="text-center" style={{ marginTop: '150px' }}>
-                <TopTitle welc={' Teams of Service'} />
+                <TopTitle welc={' Terms of Service'} />
               </div>
             </div>
           </div>
@@ -56,7 +57,9 @@ const TeamsOfService = () => {
               {teams &&
                 teams.map((team, i) => (
                   <p className="footer-subscription-text text-justify" key={i}>
-                    {team.description}
+                    {team.description ? (
+                      <div>{renderHTML(team.description)}</div>
+                    ) : null}
                   </p>
                 ))}
             </div>

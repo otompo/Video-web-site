@@ -23,45 +23,53 @@ const ContactUs = () => {
             </div>
           </div>
         </div>
-        <div className="container">
-          <div className="row">
+        <div className="container-fluid ">
+          <div className="row mx-3">
             <div className="col-md-3 my-3 text-center">
-              <ContactCard
-                icon={
-                  <PhoneFilled style={{ fontSize: '110px' }} rotate={110} />
-                }
-                title={
-                  <h5>
-                    <a href="tel:+4591412161" style={{ color: '#000' }}>
-                      {' '}
-                      +45 91 41 21 61
-                    </a>
-                  </h5>
-                }
-                body={
-                  'Reach us by calling the number above and our customer service representative will be glad to help you.'
-                }
-              />
+              <a href="tel:+4591412161" style={{ color: '#000' }}>
+                <ContactCard
+                  icon={
+                    <PhoneFilled style={{ fontSize: '110px' }} rotate={110} />
+                  }
+                  title={
+                    <h5>
+                      <a href="tel:+4591412161" style={{ color: '#000' }}>
+                        {' '}
+                        +45 91 41 21 61
+                      </a>
+                    </h5>
+                  }
+                  body={
+                    'Reach us by calling the number above and our customer service representative will be glad to help you.'
+                  }
+                />
+              </a>
             </div>
             <div className="col-md-3 my-3 text-center">
-              <ContactCard
-                icon={<WhatsAppOutlined style={{ fontSize: '110px' }} />}
-                title={
-                  <h5>
-                    <a
-                      target="_blank"
-                      href="https://wa.me/4591412161"
-                      style={{ color: '#000' }}
-                    >
-                      {' '}
-                      +45 91 41 21 61
-                    </a>
-                  </h5>
-                }
-                body={
-                  'You can also reach us through this whatsapp number provided above and our customer service representative will be glad to help you.'
-                }
-              />
+              <a
+                target="_blank"
+                href="https://wa.me/4591412161"
+                style={{ color: '#000' }}
+              >
+                <ContactCard
+                  icon={<WhatsAppOutlined style={{ fontSize: '110px' }} />}
+                  title={
+                    <h5>
+                      <a
+                        target="_blank"
+                        href="https://wa.me/4591412161"
+                        style={{ color: '#000' }}
+                      >
+                        {' '}
+                        +45 91 41 21 61
+                      </a>
+                    </h5>
+                  }
+                  body={
+                    'You can also reach us through this whatsapp number provided above and our customer service representative will be glad to help you.'
+                  }
+                />
+              </a>
             </div>
             <div className="col-md-3 my-3 text-center">
               <ContactCard
@@ -83,20 +91,22 @@ const ContactUs = () => {
               />
             </div>
             <div className="col-md-3 my-3 text-center">
-              <ContactCard
-                icon={<MailFilled style={{ fontSize: '110px' }} />}
-                title={
-                  <a
-                    href="mailto:info@afrotalian.com"
-                    style={{ color: '#000' }}
-                  >
-                    info@afrotalian.com
-                  </a>
-                }
-                body={
-                  'Email us now, so we can contact you to discuss your beautiful project. We cant wait to start an amazing journey with you.'
-                }
-              />
+              <a href="mailto:info@afrotalian.com" style={{ color: '#000' }}>
+                <ContactCard
+                  icon={<MailFilled style={{ fontSize: '110px' }} />}
+                  title={
+                    <a
+                      href="mailto:info@afrotalian.com"
+                      style={{ color: '#000' }}
+                    >
+                      info@afrotalian.com
+                    </a>
+                  }
+                  body={
+                    'Email us now, so we can contact you to discuss your beautiful project. We cant wait to start an amazing journey with you.'
+                  }
+                />
+              </a>
             </div>
           </div>
         </div>

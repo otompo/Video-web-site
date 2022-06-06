@@ -51,7 +51,7 @@ const Portfolio = () => {
             ) : (
               categories &&
               categories.map((category, i) => (
-                <div className="col-md-3" key={i}>
+                <div className="col-md-3 my-3" key={i}>
                   <Link href={`/portfolio/${category.slug}`}>
                     <a>
                       <Card

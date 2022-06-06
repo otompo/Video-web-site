@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { Context } from '../../context';
 import { useRouter } from 'next/router';
 import PageLoader from '../layout/PageLoader';
+import renderHTML from 'react-render-html';
 
 const { confirm } = Modal;
 
@@ -203,7 +204,11 @@ const ManageAbout = () => {
               line={1}
               element="span"
               truncateText="…"
-              text={about && about.description}
+              text={
+                about.description ? (
+                  <div>{renderHTML(about.description)}</div>
+                ) : null
+              }
             />
           ),
 

@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
 import Loader from './layout/Loader';
+import renderHTML from 'react-render-html';
 
 const About = () => {
   const [abouts, setAbouts] = useState([]);
@@ -23,8 +24,8 @@ const About = () => {
   };
 
   return (
-    <div className="container about" id="about">
-      <div className="row">
+    <div className="container-fluid  about" id="about">
+      <div className="row mx-4">
         {ok ? (
           <Loader />
         ) : (
@@ -43,7 +44,12 @@ const About = () => {
                 />
               </div>
               <div className="col-md-6  mt-5">
-                <p className="content">{about.description}</p>
+                <p className="content">
+                  {' '}
+                  {about.description ? (
+                    <div>{renderHTML(about.description)}</div>
+                  ) : null}
+                </p>
                 <div className="social-icons">
                   <a
                     target="_blank"

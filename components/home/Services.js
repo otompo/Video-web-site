@@ -39,8 +39,8 @@ const Services = () => {
           <div className="col-md-12 text-center">
             <ShowcaseTitle title={'SERVICES'} />
 
-            <div className="container">
-              <div className="row">
+            <div className="container-fluid ">
+              <div className="row mx-5">
                 {loading ? (
                   <Loader />
                 ) : (

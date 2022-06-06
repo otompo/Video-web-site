@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
 import Loader from '../layout/Loader';
+import renderHTML from 'react-render-html';
 
 const InfoSection = () => {
   const [abouts, setAbouts] = useState([]);
@@ -24,8 +25,8 @@ const InfoSection = () => {
   };
 
   return (
-    <div className="container" id="infoSection">
-      <div className="row">
+    <div className="container-fluid" id="infoSection">
+      <div className="row mx-4">
         <>
           {ok ? (
             <Loader />
@@ -46,7 +47,11 @@ const InfoSection = () => {
                   </div>
                 </div>
                 <div className="col-md-6  my-5">
-                  <p className="content">{about.description}</p>
+                  <p className="content">
+                    {about.description ? (
+                      <div>{renderHTML(about.description)}</div>
+                    ) : null}
+                  </p>
                 </div>
               </>
             ))

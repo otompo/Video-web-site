@@ -31,7 +31,7 @@ const Footer = () => {
 
           <div className="footer-link-items">
             <h3>ABOUT US</h3>
-            <Link href="/teamsofservice">
+            <Link href="/termsofservice">
               <a>Terms of Service</a>
             </Link>
             <Link href="/privacy-policy">

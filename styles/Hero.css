@@ -21,8 +21,9 @@
 .hero .content {
   position: absolute;
   top: 148px;
+  left: 11px;
   height: auto;
-  width: 57%;
+  width: 100%;
   justify-content: center;
   text-align: center;
   padding: 10px;

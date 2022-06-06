@@ -179,7 +179,8 @@ function ContactForm() {
                     !surName ||
                     !phoneNumber ||
                     !message ||
-                    !selectedCategory
+                    !selectedCategory ||
+                    !checked
                   }
                   type="submit"
                 >

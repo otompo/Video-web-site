@@ -7,8 +7,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { Context } from '../../context';
+import { Editor } from '@tinymce/tinymce-react';
 
-function EditTeamsOfServices(props) {
+function EditTermsOfService(props) {
   const router = useRouter();
   const { slug } = router.query;
 
@@ -18,6 +19,8 @@ function EditTeamsOfServices(props) {
   });
   const [success, setSuccess] = useState(false);
   const [ok, setOk] = useState(false);
+  const [description, setDescription] = useState({});
+
   const {
     state: { user },
     dispatch,
@@ -46,6 +49,7 @@ function EditTeamsOfServices(props) {
       //   setOk(true);
       const { data } = await axios.get(`/api/admin/teamsofservice/${slug}`);
       setValues(data);
+      setDescription(data.description);
       //   setOk(false);
     } catch (err) {
       console.log(err);
@@ -59,10 +63,11 @@ function EditTeamsOfServices(props) {
       setValues({ ...values, loading: true });
       setSuccess(true);
       const { data } = await axios.put(`/api/admin/teamsofservice/${slug}`, {
-        ...values,
+        description,
       });
       toast.success('Success');
       setValues({ ...values, description: '', loading: false });
+      router.push('/admin/termsofservice');
       setSuccess(false);
     } catch (err) {
       console.log(err);
@@ -82,7 +87,9 @@ function EditTeamsOfServices(props) {
       router.push('/');
     }
   };
-
+  const handleDescription = (e) => {
+    setDescription(e);
+  };
   return (
     <>
       {!ok ? (
@@ -102,17 +109,36 @@ function EditTeamsOfServices(props) {
                 <div className="col-md-8 offset-md-2">
                   <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                      <textarea
-                        rows="7"
-                        name="description"
-                        style={{
-                          width: '100%',
-                          height: '50vh',
-                          padding: '10px',
-                        }}
-                        value={values.description}
-                        onChange={handleChange}
-                      ></textarea>
+                      <div className="form-group">
+                        <Editor
+                          apiKey="nti1dzmlp7xe935k4cysx2rcp0zxrnsva5pc01n76kx1j9xh"
+                          // initialValue=""
+                          init={{
+                            height: 400,
+                            menubar: true,
+                            selector: 'textarea', // change this value according to your HTML
+                            images_upload_url: 'postAcceptor.php',
+                            automatic_uploads: false,
+                            images_reuse_filename: false,
+                            plugins: [
+                              'advlist autolink lists link image charmap print preview anchor',
+                              'searchreplace visualblocks code fullscreen',
+                              'insertdatetime media table paste code help wordcount',
+                            ],
+
+                            toolbar:
+                              'undo redo | formatselect | ' +
+                              'bold italic backcolor | alignleft aligncenter ' +
+                              'alignright alignjustify | bullist numlist outdent indent | ' +
+                              'removeformat | help',
+                            content_style:
+                              'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                          }}
+                          onEditorChange={handleDescription}
+                          name="description"
+                          value={description}
+                        />
+                      </div>
                     </div>
                     <div className="d-grid gap-2 my-2 ">
                       <button
@@ -120,7 +146,7 @@ function EditTeamsOfServices(props) {
                         disabled={!values.description}
                         type="submit"
                       >
-                        {values.loading ? <Spin /> : 'Update Description'}
+                        {values.loading ? <Spin /> : 'Save'}
                       </button>
                     </div>
                   </form>
@@ -135,4 +161,4 @@ function EditTeamsOfServices(props) {
   );
 }
 
-export default EditTeamsOfServices;
+export default EditTermsOfService;

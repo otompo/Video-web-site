@@ -13,8 +13,9 @@ import { Context } from '../../context';
 import { useRouter } from 'next/router';
 import PageLoader from '../layout/PageLoader';
 const { confirm } = Modal;
+import renderHTML from 'react-render-html';
 
-function TeamsOfServices(props) {
+function TermsOfService(props) {
   const router = useRouter();
   const [values, setValues] = useState({
     description: '',
@@ -133,7 +134,11 @@ function TeamsOfServices(props) {
               line={2}
               element="span"
               truncateText="…"
-              text={team && team.description}
+              text={
+                team.description ? (
+                  <div>{renderHTML(team.description)}</div>
+                ) : null
+              }
             />
           ),
 
@@ -141,7 +146,7 @@ function TeamsOfServices(props) {
             <>
               <div className="row">
                 <div className="col-md-12">
-                  <Link href={`/admin/teamsofservice/${team.slug}`}>
+                  <Link href={`/admin/termsofservice/${team.slug}`}>
                     <a>
                       {' '}
                       <EditFilled
@@ -231,4 +236,4 @@ function TeamsOfServices(props) {
   );
 }
 
-export default TeamsOfServices;
+export default TermsOfService;

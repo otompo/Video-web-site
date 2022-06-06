@@ -7,6 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { Context } from '../../context';
+import { Editor } from '@tinymce/tinymce-react';
 
 const EditAbout = () => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const EditAbout = () => {
   const [video, setVideo] = useState({});
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [description, setDescription] = useState({});
   const {
     state: { user },
     dispatch,
@@ -51,6 +53,7 @@ const EditAbout = () => {
       //   setOk(true);
       const { data } = await axios.get(`/api/admin/about/${slug}`);
       setValues(data);
+      setDescription(data.description);
       //   setOk(false);
     } catch (err) {
       console.log(err);
@@ -82,11 +85,12 @@ const EditAbout = () => {
       setValues({ ...values, loading: true });
       setSuccess(true);
       const { data } = await axios.patch(`/api/admin/about/${slug}`, {
-        ...values,
+        description,
       });
       toast.success('Success');
       setValues({ ...values, description: '', loading: false });
       setSuccess(false);
+      router.push('/admin/about');
     } catch (err) {
       console.log(err);
       setValues({ ...values, description: '', loading: false });
@@ -135,6 +139,10 @@ const EditAbout = () => {
     }
   };
 
+  const handleDescription = (e) => {
+    setDescription(e);
+  };
+
   return (
     <>
       {!okey ? (
@@ -154,17 +162,34 @@ const EditAbout = () => {
                 <div className="col-md-7">
                   <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                      <textarea
-                        rows="7"
-                        name="description"
-                        style={{
-                          width: '100%',
-                          height: '30vh',
-                          padding: '5px',
+                      <Editor
+                        apiKey="nti1dzmlp7xe935k4cysx2rcp0zxrnsva5pc01n76kx1j9xh"
+                        // initialValue=""
+                        init={{
+                          height: 400,
+                          menubar: true,
+                          selector: 'textarea', // change this value according to your HTML
+                          images_upload_url: 'postAcceptor.php',
+                          automatic_uploads: false,
+                          images_reuse_filename: false,
+                          plugins: [
+                            'advlist autolink lists link image charmap print preview anchor',
+                            'searchreplace visualblocks code fullscreen',
+                            'insertdatetime media table paste code help wordcount',
+                          ],
+
+                          toolbar:
+                            'undo redo | formatselect | ' +
+                            'bold italic backcolor | alignleft aligncenter ' +
+                            'alignright alignjustify | bullist numlist outdent indent | ' +
+                            'removeformat | help',
+                          content_style:
+                            'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                         }}
-                        value={values.description}
-                        onChange={handleChange}
-                      ></textarea>
+                        onEditorChange={handleDescription}
+                        name="description"
+                        value={description}
+                      />
                     </div>
                     <div className="d-grid gap-2 my-2 ">
                       <button

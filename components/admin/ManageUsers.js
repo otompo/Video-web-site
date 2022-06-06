@@ -31,6 +31,7 @@ const ManageUsers = () => {
   const [okey, setOkey] = useState(false);
   const [success, setSuccess] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
   const {
     state: { user },
     dispatch,

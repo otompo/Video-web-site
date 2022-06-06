@@ -4,7 +4,12 @@ import ContactForm from './forms/ContactForm';
 import { Modal } from 'antd';
 const { confirm } = Modal;
 
-const Hero = () => {
+const Hero = ({
+  title = 'Afrotalian',
+  subtitle = 'VIDEO CREATION THAT TELL YOUR STORY',
+  testimonialTitleOne = 'BEST VIDEO PRODUCTION FOR FILM-MAKING, WEDDING',
+  testimonialTitleTwo = 'COMMERCIAL & PRIVATE EVENTS AND ADVERTISING',
+}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -29,22 +34,18 @@ const Hero = () => {
         <div className="row">
           <div className="col-md-8 offset-md-2">
             <div className="content">
-              <p>Afrotalian</p>
+              <p>{title}</p>
               <div>
                 <Testimonial>
-                  <div className="testi mx-auto">
-                    BEST VIDEO PRODUCTION FOR FILM-MAKING, WEDDING,
-                  </div>
-                  <div className="testi mx-auto">
-                    COMMERCIAL & PRIVATE EVENTS AND ADVERTISING
-                  </div>
+                  <div className="testi mx-auto">{testimonialTitleOne}</div>
+                  <div className="testi mx-auto">{testimonialTitleTwo}</div>
                 </Testimonial>
               </div>
               {/* <p>
                 The Best Video Production For Filmmaking, Wedding Commercial &
                 Private Event And Advertising
               </p> */}
-              <p>VIDEO CREATION THAT TELL YOUR STORY</p>
+              <p>{subtitle}</p>
               <button href="/" className="button center" onClick={showModal}>
                 GET OFFER NOW
               </button>
