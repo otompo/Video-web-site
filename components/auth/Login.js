@@ -103,7 +103,7 @@ const Login = () => {
                       <div className="d-grid gap-2">
                         <button
                           disabled={!email || !password || loading}
-                          className="btn btn-primary"
+                          className="btn btn-primary btn-block"
                           type="submit"
                         >
                           {loading ? <SyncOutlined spin /> : 'Login'}

@@ -140,7 +140,7 @@ const SingleOfferMessage = () => {
                 <button
                   disabled={!values.email || values.loading}
                   loading={values.loading}
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-block"
                   type="submit"
                 >
                   {/* {loading ? <SyncOutlined spin /> : 'Submit'} */}

@@ -413,7 +413,7 @@ const ManagePriceDetail = () => {
                                 {inputList.length - 1 === i && (
                                   <input
                                     type="button"
-                                    className="btn btn-primary large"
+                                    className="btn btn-primary large btn-block"
                                     value="Add"
                                     onClick={handleAddInput}
                                     style={{ marginLeft: '-5px' }}
@@ -454,7 +454,7 @@ const ManagePriceDetail = () => {
                     </div> */}
                         <div className="d-grid gap-2 my-2 ">
                           <button
-                            className="btn btn-primary"
+                            className="btn btn-primary btn-block"
                             disabled={!values.title || !values.price || loading}
                             type="submit"
                           >

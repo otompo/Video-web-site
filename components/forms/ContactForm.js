@@ -160,7 +160,8 @@ function ContactForm() {
               <div className="form-group">
                 <textarea
                   rows="7"
-                  style={{ width: '100%', padding: 10 }}
+                  cols="92"
+                  style={{ padding: 10 }}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Tell us your needs"
@@ -170,23 +171,22 @@ function ContactForm() {
               <div className="col-md-12">
                 <div className="form-group">{showCategories()}</div>
               </div>
-              <div className="d-grid gap-2 my-2 ">
-                <button
-                  className="btn btn-primary"
-                  disabled={
-                    !firstName ||
-                    !email ||
-                    !surName ||
-                    !phoneNumber ||
-                    !message ||
-                    !selectedCategory ||
-                    !checked
-                  }
-                  type="submit"
-                >
-                  {loading ? <Spin /> : 'Submit'}
-                </button>
-              </div>
+
+              <button
+                className="btn btn-primary btn-block"
+                disabled={
+                  !firstName ||
+                  !email ||
+                  !surName ||
+                  !phoneNumber ||
+                  !message ||
+                  !selectedCategory ||
+                  !checked
+                }
+                type="submit"
+              >
+                {loading ? <Spin /> : 'Submit'}
+              </button>
             </form>
           </div>
         </div>

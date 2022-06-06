@@ -17,16 +17,22 @@
   justify-content: center;
 }
 .carousel-control-next-icon {
-  display: none !important;
+  /* display: none !important; */
+  background-color: #33195a !important;
 }
 .carousel-control-prev-icon {
-  display: none !important;
+  /* display: none !important; */
+  background-color: #33195a !important;
 }
 .carousel-indicators {
   /* margin-bottom: 10rem !important; */
   bottom: 170px !important;
+  opacity: 2.5 !important;
 }
-
+.carousel-control-next,
+.carousel-control-prev {
+  color: #33195a !important;
+}
 .carouselUnit {
   height: 70vh;
   background: #f3f3f3;
@@ -38,6 +44,7 @@
   height: 17px !important;
   width: 17px !important;
 }
+
 .monial {
   height: 260px;
   background: #eee;

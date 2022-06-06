@@ -159,7 +159,7 @@ const EditAbout = () => {
               </div>
               <hr />
               <div className="row my-5">
-                <div className="col-md-7">
+                <div className="col-md-8">
                   <form onSubmit={handleSubmit}>
                     <div className="form-group">
                       <Editor
@@ -191,22 +191,22 @@ const EditAbout = () => {
                         value={description}
                       />
                     </div>
-                    <div className="d-grid gap-2 my-2 ">
+                    <div className="my-2">
                       <button
-                        className="btn btn-primary"
+                        className="btn btn-primary btn-block"
                         disabled={!values.description}
                         type="submit"
                       >
-                        {values.loading ? <Spin /> : 'Update Description'}
+                        {values.loading ? <Spin /> : 'Update'}
                       </button>
                     </div>
                   </form>
                 </div>
-                <div className="col-md-4 offset-md-1">
+                <div className="col-md-4">
                   <form onSubmit={handleAboutVideoSubmit}>
                     <div className="form-group">
                       <label
-                        className="btn btn-dark btn-block text-left my-1 text-center float-right"
+                        className="btn btn-dark btn-block text-left my-1 text-center "
                         style={{
                           width: '50%',
                           height: '20vh',
@@ -230,6 +230,7 @@ const EditAbout = () => {
                         />
                       </label>
                     </div>
+
                     <div className="form-group">
                       {progress > 0 && (
                         <Progress
@@ -240,17 +241,14 @@ const EditAbout = () => {
                         />
                       )}
                     </div>
-
-                    <div className="d-grid gap-2 my-2 ">
-                      <button
-                        className="btn btn-primary"
-                        disabled={loading}
-                        type="submit"
-                        style={{ width: '50%' }}
-                      >
-                        {ok ? <Spin /> : 'Update Video'}
-                      </button>
-                    </div>
+                    <button
+                      className="btn btn-primary"
+                      disabled={loading}
+                      type="submit"
+                      style={{ width: '50%' }}
+                    >
+                      {ok ? <Spin /> : 'Update Video'}
+                    </button>
                   </form>
                 </div>
               </div>

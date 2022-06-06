@@ -363,7 +363,7 @@ const ManageUsers = () => {
                     </div>
                     <div className="d-grid gap-2 my-2 ">
                       <button
-                        className="btn btn-primary"
+                        className="btn btn-primary btn-block"
                         disabled={!values.name || !values.email}
                         type="submit"
                       >
