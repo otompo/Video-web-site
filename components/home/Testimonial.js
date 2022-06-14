@@ -55,7 +55,13 @@ const TestimonialSlider = () => {
             <ShowcaseTitle title="STORIES" />
           </div>
         </div>
-        <Carousel responsive={responsive} autoPlay={false}>
+        <Carousel
+          responsive={responsive}
+          // autoPlay={false}
+          shouldResetAutoplay={false}
+          ssr={true}
+          infinite={true}
+        >
           {reviews &&
             reviews.map((review, i) => (
               <div className="mx-4  tesmonial">
