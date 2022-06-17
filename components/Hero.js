@@ -11,7 +11,6 @@ const Hero = ({
   testimonialTitleTwo = 'COMMERCIAL & PRIVATE EVENTS AND ADVERTISING',
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);

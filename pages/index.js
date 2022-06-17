@@ -17,6 +17,7 @@ export default function Index() {
     setTestimonialTitleOne,
     setTestimonialTitleTwo,
   } = useHome();
+
   return (
     <Layout>
       <Hero
