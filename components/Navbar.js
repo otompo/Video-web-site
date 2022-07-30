@@ -105,7 +105,6 @@ const Navbar = () => {
               <a>Prices</a>
             </Link>
           </li>
-
           <li
             className={
               router.pathname == '/portfolio' ? 'active-nav' : 'nav-item '

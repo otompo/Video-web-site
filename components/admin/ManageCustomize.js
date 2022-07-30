@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '../layout/Layout';
-import { Row, Col, Input, Button, Divider } from 'antd';
+import { Row, Col, Input, Button } from 'antd';
 import AdminRoute from '../routes/AdminRoutes';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -22,6 +22,7 @@ function ManageCustomize(props) {
     setTestimonialTitleOne,
     setTestimonialTitleTwo,
   } = useHome();
+
   const {
     contactTitleOne,
     contactTitleTwo,
