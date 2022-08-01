@@ -20,6 +20,7 @@ const websiteSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    video: {},
     testimonialTitleTwo: {
       type: String,
       required: true,

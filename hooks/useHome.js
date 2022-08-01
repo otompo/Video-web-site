@@ -7,6 +7,7 @@ const useHome = () => {
   const [subtitle, setSubtitle] = useState('');
   const [testimonialTitleOne, setTestimonialTitleOne] = useState('');
   const [testimonialTitleTwo, setTestimonialTitleTwo] = useState('');
+  const [video, setVideo] = useState({});
 
   useEffect(() => {
     loadHomepage();
@@ -20,6 +21,7 @@ const useHome = () => {
       setSubtitle(data.subtitle);
       setTestimonialTitleOne(data.testimonialTitleOne);
       setTestimonialTitleTwo(data.testimonialTitleTwo);
+      setVideo(data.video);
     } catch (err) {
       console.log(err);
     }
@@ -30,10 +32,12 @@ const useHome = () => {
     subtitle,
     testimonialTitleOne,
     testimonialTitleTwo,
+    video,
     setTitle,
     setSubtitle,
     setTestimonialTitleOne,
     setTestimonialTitleTwo,
+    setVideo,
   };
 };
 

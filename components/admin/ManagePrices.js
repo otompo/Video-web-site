@@ -9,12 +9,12 @@ import {
 import AdminRoute from '../routes/AdminRoutes';
 import Layout from '../layout/Layout';
 import TextTruncate from 'react-text-truncate';
-import axios from 'axios';
+import PageLoader from '../layout/PageLoader';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import Loader from '../layout/Loader';
 import { Context } from '../../context';
-import PageLoader from '../layout/PageLoader';
+import axios from 'axios';
 
 const { confirm } = Modal;
 
@@ -295,6 +295,7 @@ const ManagePrices = () => {
                         />
                       </label>
                     </div>
+
                     <div className="form-group">
                       {progress > 0 && (
                         <Progress

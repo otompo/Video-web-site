@@ -7,16 +7,8 @@ import Services from '../components/home/Services';
 import useHome from '../hooks/useHome';
 
 export default function Index() {
-  const {
-    title,
-    subtitle,
-    testimonialTitleOne,
-    testimonialTitleTwo,
-    setTitle,
-    setSubtitle,
-    setTestimonialTitleOne,
-    setTestimonialTitleTwo,
-  } = useHome();
+  const { title, subtitle, testimonialTitleOne, testimonialTitleTwo } =
+    useHome();
 
   return (
     <Layout>

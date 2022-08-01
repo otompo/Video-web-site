@@ -1,26 +1,31 @@
 import React, { useState } from 'react';
 import Layout from '../layout/Layout';
-import { Row, Col, Input, Button } from 'antd';
+import { Tabs, Row, Col, Input, Button, Progress } from 'antd';
 import AdminRoute from '../routes/AdminRoutes';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import useHome from '../../hooks/useHome';
 import useContact from '../../hooks/useContact';
 const { TextArea } = Input;
+const { TabPane } = Tabs;
 
 function ManageCustomize(props) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [uploadButtonText, setUploadButtonText] = useState('Upload Video');
+  const [progress, setProgress] = useState(0);
 
   const {
     title,
     subtitle,
     testimonialTitleOne,
     testimonialTitleTwo,
+    video,
     setTitle,
     setSubtitle,
     setTestimonialTitleOne,
     setTestimonialTitleTwo,
+    setVideo,
   } = useHome();
 
   const {
@@ -54,6 +59,7 @@ function ManageCustomize(props) {
         subtitle,
         testimonialTitleOne,
         testimonialTitleTwo,
+        video,
       });
       setLoading(false);
       toast.success('Saved');
@@ -85,6 +91,32 @@ function ManageCustomize(props) {
     }
   };
 
+  const handleVideo = async (e) => {
+    try {
+      setLoading(true);
+      const file = e.target.files[0];
+      setUploadButtonText(file.name);
+      const videoData = new FormData();
+      videoData.append('video', file);
+      //   console.log(file);
+      // save progress bar and send video as form data to backend
+      const { data } = await axios.post(`/api/upload/video`, videoData, {
+        onUploadProgress: (e) => {
+          setProgress(Math.round((100 * e.loaded) / e.total));
+        },
+      });
+      // once response is received
+      setVideo(data);
+      setUploadButtonText('Upload Video');
+      toast.success('Success');
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      setUploadButtonText('Upload Video');
+      toast.error('Video upload failed');
+    }
+  };
+
   return (
     <Layout title="Customize">
       <AdminRoute>
@@ -97,6 +129,18 @@ function ManageCustomize(props) {
           </div>
           <hr />
         </div>
+        <Tabs defaultActiveKey="1" style={{ width: '180%', marginRight: 50 }}>
+          <TabPane tab="CUSTOMIZE HERO SECTION" key="1">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-8">
+                  <h2>CUSTOMIZE HERO SECTION</h2>
+                </div>
+              </div>
+            </div>
+          </TabPane>
+        </Tabs>
+
         <div className="row">
           <div className="col-md-6 ">
             <div className="card" style={{ height: '100%' }}>
@@ -148,6 +192,7 @@ function ManageCustomize(props) {
               </div>
             </div>
           </div>
+
           <div className="col-md-6 ">
             <div className="card" style={{ height: '100%' }}>
               <div className="card-body">
