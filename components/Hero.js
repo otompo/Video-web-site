@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Testimonial from 'react-testimonial';
 import ContactForm from './forms/ContactForm';
 import { Modal } from 'antd';
+
 const { confirm } = Modal;
 
 const Hero = ({
@@ -9,6 +10,7 @@ const Hero = ({
   subtitle = 'VIDEO CREATION THAT TELL YOUR STORY',
   testimonialTitleOne = 'BEST VIDEO PRODUCTION FOR FILM-MAKING, WEDDING',
   testimonialTitleTwo = 'COMMERCIAL & PRIVATE EVENTS AND ADVERTISING',
+  video,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -26,9 +28,12 @@ const Hero = ({
 
   return (
     <div className="hero" id="hero">
-      <video autoPlay loop muted className="w-full h-screen z-10 video">
-        <source src="/videos/video-1.mp4" type="video/mp4" />
-      </video>
+      {video && video.Location ? (
+        <video autoPlay loop muted className="w-full h-screen z-10 video">
+          <source src={video && video.Location} type="video/mp4" />
+        </video>
+      ) : null}
+
       <div className="container">
         <div className="row">
           <div className="col-md-8 offset-md-2">

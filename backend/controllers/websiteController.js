@@ -15,7 +15,7 @@ export const createPage = async (req, res) => {
   try {
     const { page, video } = req.body;
     const found = await Website.findOne({ page });
-
+    // console.log('video', video);
     if (found) {
       const params = {
         Bucket: found.video.Bucket,

@@ -7,7 +7,7 @@ import Services from '../components/home/Services';
 import useHome from '../hooks/useHome';
 
 export default function Index() {
-  const { title, subtitle, testimonialTitleOne, testimonialTitleTwo } =
+  const { title, subtitle, testimonialTitleOne, testimonialTitleTwo, video } =
     useHome();
 
   return (
@@ -17,7 +17,9 @@ export default function Index() {
         subtitle={subtitle}
         testimonialTitleOne={testimonialTitleOne}
         testimonialTitleTwo={testimonialTitleTwo}
+        video={video}
       />
+
       <InfoSection />
       <Services />
       <TestimonialSlider />
